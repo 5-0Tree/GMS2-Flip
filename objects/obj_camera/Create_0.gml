@@ -3,7 +3,7 @@
 var baseW = 1920,
 	baseH = 1080,
 	ratio = baseW / baseH,
-	scale = 8;
+	scale = 4;
 
 if (display_get_width() < display_get_height())
 {
