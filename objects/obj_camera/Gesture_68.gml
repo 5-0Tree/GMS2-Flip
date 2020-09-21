@@ -1,1 +1,3 @@
-/// @description 
+/// @description End Pan
+
+dragStart = false;
