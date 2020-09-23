@@ -3,6 +3,11 @@
 _spd = -1;
 spd = 4;
 
+if (global.edit)
+{
+	_spd = 4;
+}
+
 xTo = x;
 yTo = y;
 
@@ -10,6 +15,12 @@ dragStart = false;
 
 dragX = x;
 dragY = y;
+
+if (global.edit)
+{
+	x = room_width / 2;
+	y = room_height / 2;
+}
 
 x = clamp(x, 64, room_width - global.WIDTH / 2 - 64);
 y = clamp(y, 64, room_height - global.HEIGHT / 2 - 64);

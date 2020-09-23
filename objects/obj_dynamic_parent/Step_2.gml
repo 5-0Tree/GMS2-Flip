@@ -1,6 +1,6 @@
 /// @description Movement
 
-if (movable)
+if (movable && !global.edit)
 {
 	if (ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 	{

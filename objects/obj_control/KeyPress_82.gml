@@ -1,3 +1,3 @@
 /// @description *DEBUG* Restart Game
 
-game_restart();
+//game_restart();

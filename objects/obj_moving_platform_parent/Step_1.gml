@@ -1,22 +1,45 @@
 /// @description Follow Path
 
-//image_angle = global.screenAngle;
-
 var sw = sprite_width,
 	sh = sprite_height,
-	_c = collision_point(x + sw * dsin(global.angleFix), y - sh * dcos(global.angleFix), obj_player, false, true);
+	_c = collision_point(x - sw / 1.5 * dsin(global.angleFix), y - sh / 1.5 * dcos(global.angleFix), obj_player, false, true),
+	_o = collision_point(x, y, obj_waypoint, false, true);
 
-if (startCon == "Player Over")
+if (!init)
 {
-	if (_c != noone)
+	if (_o != noone)
 	{
-		canMove = true;
+		with (_o)
+		{
+			if (_o.wpType == 1)
+			{
+				other.wp = _o;
+			}
+			
+			if (_o.wpType == 2)
+			{
+				other.atEnd = true;
+			}
+		}
+		
+		init = true;
 	}
 }
 
-if (canMove && wpID != noone && !atEnd)
+if (!global.edit)
 {
-	with (wpID)
+	if (startCon == "Player Over")
+	{
+		if (_c != noone)
+		{
+			canMove = true;
+		}
+	}
+}
+
+if (canMove && wp != noone && !atEnd && !global.edit)
+{
+	with (wp)
 	{
 		var _s = other,
 			_px = pl[_s.wpPoint][0],

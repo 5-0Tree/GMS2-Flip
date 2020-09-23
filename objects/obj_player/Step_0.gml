@@ -5,12 +5,12 @@ if (fall)
 	image_index = 1;
 }
 
-else
+else if (canFall)
 {
 	image_index = 0;
 }
 
-if (canMove && !fall && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
+if (image_index == 0 && !global.edit && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 {
 	var dir = keyboard_check(vk_right) - keyboard_check(vk_left),
 		af = global.angleFix,
@@ -28,7 +28,15 @@ if (canMove && !fall && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 			if (dcos(-other.image_angle) == dcos(image_angle - 90) &&
 				dsin(other.image_angle) == dsin(image_angle - 90))
 			{
-				room_restart();
+				if (room == rm_editor)
+				{
+					toggle_editor();
+				}
+				
+				else
+				{
+					room_restart();
+				}
 			}
 		}
 	}
@@ -40,7 +48,15 @@ if (canMove && !fall && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 			if (dcos(other.image_angle) == dcos(image_angle + 90) &&
 				dsin(-other.image_angle) == dsin(image_angle - 90))
 			{
-				room_restart();
+				if (room == rm_editor)
+				{
+					toggle_editor();
+				}
+				
+				else
+				{
+					room_restart();
+				}
 			}
 		}
 	}

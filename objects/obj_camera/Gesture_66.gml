@@ -1,6 +1,6 @@
 /// @description Begin Pan
 
-if (keyboard_check(vk_space))
+if (keyboard_check(vk_space) && global.edit)
 {
 	if (event_data[? "posX"] > 56 * global.expanded + global.editX - global.WIDTH / 2)
 	{	

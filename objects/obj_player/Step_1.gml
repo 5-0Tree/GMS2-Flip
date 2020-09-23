@@ -24,7 +24,7 @@ var sw = sprite_width,
 	sh = sprite_height;
 
 if (collision_line(x - sw, y, x + sw, y, obj_wall_sp_anti, false, true) == noone &&
-	collision_line(x, y - sh, x, y + sh, obj_wall_sp_anti, false, true) == noone)
+	collision_line(x, y - sh, x, y + sh, obj_wall_sp_anti, false, true) == noone && !global.edit)
 {
 	with (obj_dynamic_parent)
 	{
@@ -56,3 +56,5 @@ if (collision_line(x - sw, y, x + sw, y, obj_wall_sp_anti, false, true) == noone
 		}
 	}
 }
+
+canMove = !global.edit;
