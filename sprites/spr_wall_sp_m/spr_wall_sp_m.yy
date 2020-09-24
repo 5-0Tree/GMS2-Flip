@@ -71,8 +71,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"3b7ec41a-4b54-4d69-b9cc-9bf90d342c05","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "special",
-    "path": "folders/Sprites/blocks/special.yy",
+    "name": "enemy",
+    "path": "folders/Sprites/enemy.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_wall_sp_m",

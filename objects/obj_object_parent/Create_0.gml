@@ -2,6 +2,8 @@
 
 selected = false;
 
+hazard = false;
+
 fall = false;
 movable = true;
 move = false;

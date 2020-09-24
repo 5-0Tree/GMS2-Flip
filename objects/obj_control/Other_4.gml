@@ -31,6 +31,8 @@ global.screenAngle = 0;
 global.canRotate = false;
 global.angleFix = 0;
 
+global.gameOver = false;
+
 if (room = rm_init)
 {
 	random_set_seed(irandom(1000000000));

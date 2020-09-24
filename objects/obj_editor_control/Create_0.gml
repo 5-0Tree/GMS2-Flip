@@ -29,18 +29,25 @@ global.hist = [];
 global.hNum = 0;
 
 objs = {
-	Blocks : [
-		obj_wall,
-		obj_wall_sp_anti
-	], Active : [
-		obj_wall_sp_mp,
-		obj_waypoint
-	], Enemy : [
+	Enemy : [
 		obj_wall_sp_c,
-		obj_wall_sp_m
+		obj_wall_sp_m,
+		obj_enemy_c,
+		obj_enemy_m,
+		obj_spikes
 	], Player : [
 		obj_player,
 		obj_goal
+	], Blocks : [
+		obj_wall_1,
+		obj_wall_2,
+		obj_wall_3,
+		obj_wall_4
+	], Active : [
+		obj_box_1,
+		obj_waypoint,
+		obj_wall_sp_mp_1,
+		obj_wall_sp_anti
 	]
 };
 

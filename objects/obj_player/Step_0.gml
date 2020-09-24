@@ -18,24 +18,62 @@ if (image_index == 0 && !global.edit && ceil(floor(global.screenAngle + 0.5) - 0
 		sh = sprite_height,
 		hw = sw / 2,
 		hh = sh / 2,
-		cc = collision_point(x + sw * dcos(image_angle), y - sh * dsin(image_angle), obj_wall_sp_c, false, true),
-		cm = collision_point(x - sw * dcos(image_angle), y + sh * dsin(image_angle), obj_wall_sp_m, false, true);
+		cl = ds_list_create(),
+		cc = collision_point(x + sw * dcos(image_angle), y - sh * dsin(image_angle), obj_collision_parent, false, true),
+		cm = collision_point(x - sw * dcos(image_angle), y + sh * dsin(image_angle), obj_collision_parent, false, true);
+	
+	collision_point_list(x, y, obj_object_parent, false, true, cl, false);
+	
+	if (!ds_list_empty(cl))
+	{
+		for (var i = 0; i < ds_list_size(cl); i ++)
+		{
+			with (cl[| i])
+			{
+				if (hazard)
+				{
+					if (haz_color == 0)
+					{
+						global.gameOver = true;
+					}
+				}
+			}
+		}
+	}
+	
+	ds_list_destroy(cl);
 	
 	if (cc != noone)
 	{
 		with (cc)
 		{
-			if (dcos(-other.image_angle) == dcos(image_angle - 90) &&
-				dsin(other.image_angle) == dsin(image_angle - 90))
+			if (hazard)
 			{
-				if (room == rm_editor)
+				if (haz_color == -1)
 				{
-					toggle_editor();
-				}
-				
-				else
-				{
-					room_restart();
+					if (haz_type == 0)
+					{
+						if (dcos(-other.image_angle) == dcos(image_angle - 90) &&
+							dsin(other.image_angle) == dsin(image_angle - 90))
+						{
+							global.gameOver = true;
+						}
+					}
+					
+					else if (haz_type == 1)
+					{
+						//1 Stuff...
+					}
+					
+					else if (haz_type == 2)
+					{
+						//2 Stuff...
+					}
+					
+					else if (haz_type == 3)
+					{
+						global.gameOver = true;
+					}
 				}
 			}
 		}
@@ -45,19 +83,55 @@ if (image_index == 0 && !global.edit && ceil(floor(global.screenAngle + 0.5) - 0
 	{
 		with (cm)
 		{
-			if (dcos(other.image_angle) == dcos(image_angle + 90) &&
-				dsin(-other.image_angle) == dsin(image_angle - 90))
+			if (hazard)
 			{
-				if (room == rm_editor)
+				if (haz_color == 1)
 				{
-					toggle_editor();
-				}
-				
-				else
-				{
-					room_restart();
+					if (haz_type == 0)
+					{
+						if (dcos(other.image_angle) == dcos(image_angle + 90) &&
+							dsin(-other.image_angle) == dsin(image_angle - 90))
+						{
+							global.gameOver = true;
+						}
+					}
+					
+					else if (haz_type == 1)
+					{
+						//1 Stuff...
+					}
+					
+					else if (haz_type == 2)
+					{
+						//2 Stuff...
+					}
+					
+					else if (haz_type == 3)
+					{
+						global.gameOver = true;
+					}
 				}
 			}
+		}
+	}
+	
+	if (global.gameOver)
+	{
+		if (move)
+		{
+			global.gameOver = false;
+		}
+		
+		else if (room == rm_editor)
+		{
+			toggle_editor();
+			
+			exit;
+		}
+			
+		else
+		{
+			room_restart();
 		}
 	}
 	

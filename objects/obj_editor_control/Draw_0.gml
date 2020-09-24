@@ -74,7 +74,8 @@ if (global.edit)
 		
 			if ((mouse_check_button_pressed(mb_left) && selObj == obj_waypoint) ^^ (mouse_check_button(mb_left) && selObj != obj_waypoint))
 			{
-				var can_place = true;
+				var can_place = false,
+					_ds = ds_list_create();
 				
 				if (collision_point(grid_x + 8, grid_y + 8, obj_object_parent, false, true) != noone)
 				{
@@ -93,40 +94,42 @@ if (global.edit)
 					
 					else
 					{
-						var _ds = ds_list_create();
-						
 						collision_point_list(grid_x + 8, grid_y + 8, obj_object_parent, false, true, _ds, false);
 						
 						for (var i = 0; i < ds_list_size(_ds); i ++)
 						{
 							if (i < 1)
 							{
-								if (ds_list_find_value(_ds, i).object_index == obj_waypoint)
+								if (_ds[| i].object_index == obj_waypoint)
 								{
 									can_place = true;
 								}
-								
-								else
-								{
-									can_place = false;
-								}
-							}
-							
-							else
-							{
-								can_place = false;
 							}
 						}
-						
-						ds_list_destroy(_ds);
 					}
 				}
+				
+				else
+				{
+					can_place = true;
+				}
+				
+				if (ds_list_size(_ds) > 0)
+				{
+					if (_ds[| 0].object_index == obj_spikes)
+					{
+						can_place = true;
+					}
+				}
+				
+				ds_list_destroy(_ds);
 				
 				if (can_place)
 				{
 					with (instance_create_layer(grid_x + 8, grid_y + 8, "Objects", selObj))
 					{
 						var id_arr = [id],
+							_b = false,
 							_iswp = false;
 						
 						if (object_index == obj_waypoint)
@@ -171,6 +174,28 @@ if (global.edit)
 						
 						image_angle = other.angle;
 						
+						if (object_index == obj_spikes)
+						{
+							var _ds = ds_list_create();
+							
+							collision_point_list(x, y, obj_spikes, false, true, _ds, false);
+							
+							for (var i = 0; i < ds_list_size(_ds); i ++)
+							{
+								with (_ds[| i])
+								{
+									if (dsin(image_angle) == dsin(other.image_angle) && dcos(image_angle) == dcos(other.image_angle))
+									{
+										instance_destroy(other);
+									
+										_b = true;
+									}
+								}
+							}
+							
+							ds_list_destroy(_ds);
+						}
+						
 						if (object_index == obj_player)
 						{
 							defAng = image_angle;
@@ -182,14 +207,17 @@ if (global.edit)
 						x_origin = x;
 						y_origin = y;
 						
-						global.hist[global.hNum + _iswp] = ["Add", id_arr];
-						
-						if (!_iswp)
+						if (!_b)
 						{
-							global.hNum ++;
+							global.hist[global.hNum + _iswp] = ["Add", id_arr];
+							
+							if (!_iswp)
+							{
+								global.hNum ++;
+							}
+							
+							array_resize(global.hist, global.hNum);
 						}
-						
-						array_resize(global.hist, global.hNum);
 						
 						other.lchanged = true;
 					}
@@ -199,41 +227,82 @@ if (global.edit)
 		
 		if (mouse_check_button(mb_right))
 		{
-			with (collision_point(grid_x + 8, grid_y + 8, obj_object_parent, false, true))
+			var _ds = ds_list_create(),
+				id_arr = [];
+			
+			collision_point_list(grid_x + 8, grid_y + 8, obj_object_parent, false, true, _ds, false);
+			
+			for (var i = 0; i < ds_list_size(_ds); i ++)
 			{
-				var id_arr = [id];
-				
-				if (object_index == obj_waypoint)
+				with (_ds[| i])
 				{
-					other.wpID ++;
-					other.wpNum = 0;
-					other.wpType = 1;
-					other.wpPlace = [];
-					
-					for (var i = 0; i < instance_number(obj_waypoint); i ++)
+					if (i < 1)
 					{
-						with (instance_find(obj_waypoint, i))
+						id_arr = [id];
+					}
+					
+					if (object_get_parent(object_index) == obj_moving_platform_parent)
+					{
+						continue;
+					}
+					
+					//Work on: Moving PLatform deletion...
+					
+					if (object_index == obj_waypoint)
+					{
+						with (obj_moving_platform_parent)
 						{
-							if (wpID == other.wpID)
+							if (place_meeting(x, y, other))
 							{
-								id_arr[i] = id;
+								continue;
+							}
+						}
+						
+						other.wpID ++;
+						other.wpNum = 0;
+						other.wpType = 1;
+						other.wpPlace = [];
+						
+						for (var j = 0; j < instance_number(obj_waypoint); j ++)
+						{
+							with (instance_find(obj_waypoint, j))
+							{
+								if (wpID == other.wpID)
+								{
+									id_arr[j] = id;
+								}
 							}
 						}
 					}
+					
+					if (object_index == obj_spikes)
+					{
+						if (ds_list_size(_ds) > 1)
+						{
+							id_arr[i] = id;
+							
+							if (i < ds_list_size(_ds) - 1)
+							{
+								continue;
+							}
+						}
+					}
+					
+					global.hist[global.hNum] = ["Delete", id_arr];
+					global.hNum ++;
+					
+					array_resize(global.hist, global.hNum);
+					
+					for (var i = 0; i < array_length(id_arr); i ++)
+					{
+						instance_deactivate_object(id_arr[i]);
+					}
+					
+					other.lchanged = true;
 				}
-				
-				global.hist[global.hNum] = ["Delete", id_arr];
-				global.hNum ++;
-				
-				array_resize(global.hist, global.hNum);
-				
-				for (var i = 0; i < array_length(id_arr); i ++)
-				{
-					instance_deactivate_object(id_arr[i]);
-				}
-				
-				other.lchanged = true;
 			}
+			
+			ds_list_destroy(_ds);
 		}
 	}
 	

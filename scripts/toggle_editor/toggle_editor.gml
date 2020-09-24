@@ -4,6 +4,8 @@ function toggle_editor()
 {
 	global.edit = !global.edit;
 	
+	global.gameOver = false;
+	
 	global.screenAngle = 0;
 	global.angleFix = 0;
 	

@@ -80,8 +80,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"09522692-cda1-4b55-9024-b40f635d9ee4","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "waypoints",
-    "path": "folders/Sprites/interactives/waypoints.yy",
+    "name": "interactives",
+    "path": "folders/Sprites/interactives.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_waypoint",
