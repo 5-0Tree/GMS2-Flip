@@ -5,8 +5,8 @@ if (dragStart)
 	x = floor((dragX - event_data[? "rawposX"]) / 8);
 	y = floor((dragY - event_data[? "rawposY"]) / 8);
 	
-	x = clamp(x, 64, room_width - global.WIDTH / 2 - 64);
-	y = clamp(y, 64, room_height - global.HEIGHT / 2 - 64);
+	x = clamp(x, 0, room_width - global.WIDTH / 2);
+	y = clamp(y, 0, room_height - global.HEIGHT / 2);
 	
 	var CANG = dcos(global.screenAngle),
 		SANG = dsin(global.screenAngle),

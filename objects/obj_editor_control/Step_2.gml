@@ -46,14 +46,6 @@ if (global.edit)
 						}
 						
 						global.hNum ++;
-						
-						if (selObj == obj_waypoint)
-						{
-							if (wpNum > 0)
-							{
-								wpNum ++;
-							}
-						}
 					}
 					
 					else if (global.hist[global.hNum][0] == "Delete")
@@ -64,14 +56,6 @@ if (global.edit)
 						}
 						
 						global.hNum ++;
-						
-						if (selObj == obj_waypoint)
-						{
-							if (wpNum > 0)
-							{
-								wpNum --;
-							}
-						}
 					}
 				}
 			}
@@ -89,14 +73,6 @@ if (global.edit)
 						{
 							instance_deactivate_object(global.hist[global.hNum][1][i]);
 						}
-						
-						if (selObj == obj_waypoint)
-						{
-							if (wpNum > 0)
-							{
-								wpNum --;
-							}
-						}
 					}
 					
 					else if (global.hist[global.hNum - 1][0] == "Delete")
@@ -106,14 +82,6 @@ if (global.edit)
 						for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
 						{
 							instance_activate_object(global.hist[global.hNum][1][i]);
-						}
-						
-						if (selObj == obj_waypoint)
-						{
-							if (wpNum > 0)
-							{
-								wpNum ++;
-							}
 						}
 					}
 				}

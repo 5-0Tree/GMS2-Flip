@@ -46,6 +46,8 @@ function save_level(level_name)
 				", " +
 				string(y) +
 				", " +
+				string(editLayer) +
+				", " +
 				string(movable) +
 				", " +
 				string(a_origin) +

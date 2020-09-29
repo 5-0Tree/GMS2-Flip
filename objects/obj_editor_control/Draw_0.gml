@@ -2,6 +2,8 @@
 
 var _x = global.editX - global.WIDTH / 2,
 	_y = global.editY - global.HEIGHT / 2,
+	_x2 = global.editX + global.WIDTH / 2,
+	_y2 = global.editY + global.HEIGHT / 2,
 	grid_x = floor(mouse_x / 16) * 16,
 	grid_y = floor(mouse_y / 16) * 16,
 	_sel = selObj;
@@ -10,8 +12,8 @@ if (global.edit)
 {
 	//surface_set_target(surfGUI);
 	
-	grid_x = clamp(grid_x, 64, room_width - global.WIDTH / 2 - 64);
-	grid_y = clamp(grid_y, 64, room_height - global.HEIGHT / 2 - 64);
+	grid_x = clamp(grid_x, 0, room_width - global.WIDTH / 2);
+	grid_y = clamp(grid_y, 0, room_height - global.HEIGHT / 2);
 	
 	if (mouse_x < _x + 56 && mouse_y > _y + 16)
 	{
@@ -20,22 +22,18 @@ if (global.edit)
 	
 	scroll[selCat] = clamp(scroll[selCat], -max(0, ceil(array_length(variable_struct_get(objs, objNames[selCat])) / 2 + 1) * 24 - global.HEIGHT), 0);
 	
-	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, _y + global.HEIGHT / 2 - 4,
-	 _x + 54 * global.expanded + 6, _y + global.HEIGHT / 2 + 4))
+	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, global.editY - 4, _x + 54 * global.expanded + 6, global.editY + 4))
 	{
-		if (mouse_check_button(mb_left))
+		if (mouse_check_button_pressed(mb_left))
 		{
 			expandPressed = true;
+			
+			clickingButton = true;
 		}
 		
-		else if (mouse_check_button_released(mb_left))
+		if (mouse_check_button_released(mb_left))
 		{
 			global.expanded = !global.expanded;
-		}
-		
-		else
-		{
-			expandPressed = false;
 		}
 	}
 	
@@ -44,7 +42,15 @@ if (global.edit)
 		expandPressed = false;
 	}
 	
-	if (mouse_x > 58 * global.expanded + global.editX - global.WIDTH / 2 && !keyboard_check(vk_control) && !keyboard_check(vk_space) && !expandPressed)
+	if (!mouse_check_button(mb_left))
+	{
+		expandPressed = false;
+		
+		clickingButton = false;
+	}
+	
+	if (mouse_x > 58 * global.expanded + _x && !(mouse_x > _x2 - 40 && mouse_y > _y2 - 16) &&
+	 !keyboard_check(vk_control) && !keyboard_check(vk_space) && !expandPressed && !clickingButton)
 	{
 		if (object_exists(selObj))
 		{
@@ -98,12 +104,16 @@ if (global.edit)
 						
 						for (var i = 0; i < ds_list_size(_ds); i ++)
 						{
-							if (i < 1)
+							if (_ds[| i].object_index == obj_waypoint)
 							{
-								if (_ds[| i].object_index == obj_waypoint)
-								{
-									can_place = true;
-								}
+								can_place = true;
+							}
+							
+							else
+							{
+								can_place = false;
+								
+								break;
 							}
 						}
 					}
@@ -130,11 +140,11 @@ if (global.edit)
 					{
 						var id_arr = [id],
 							_b = false,
-							_iswp = false;
+							_p = false;
 						
 						if (object_index == obj_waypoint)
 						{
-							_iswp = true;
+							_p = true;
 							
 							wpID = other.wpID;
 							wpNum = other.wpNum;
@@ -158,14 +168,13 @@ if (global.edit)
 								other.wpType = 0;
 							}
 							
-							for (var i = 0; i < instance_number(obj_waypoint); i ++)
+							with (obj_waypoint)
 							{
-								with (instance_find(obj_waypoint, i))
+								if (wpID == other.wpID)
 								{
-									if (wpID == other.wpID)
-									{
-										id_arr[i] = id;
-									}
+									id_arr[obj_editor_control.wpN] = id;
+									
+									obj_editor_control.wpN ++;
 								}
 							}
 							
@@ -203,15 +212,17 @@ if (global.edit)
 							rot = -defAng;
 						}
 						
+						editLayer = max(0, global.Layer);
+						
 						a_origin = image_angle;
 						x_origin = x;
 						y_origin = y;
 						
 						if (!_b)
 						{
-							global.hist[global.hNum + _iswp] = ["Add", id_arr];
+							global.hist[global.hNum] = ["Add", id_arr];
 							
-							if (!_iswp)
+							if (!_p)
 							{
 								global.hNum ++;
 							}
@@ -228,23 +239,16 @@ if (global.edit)
 		if (mouse_check_button(mb_right))
 		{
 			var _ds = ds_list_create(),
+				_b = false,
 				id_arr = [];
 			
-			collision_point_list(grid_x + 8, grid_y + 8, obj_object_parent, false, true, _ds, false);
+			collision_point_list(mouse_x, mouse_y, obj_object_parent, false, true, _ds, true);
 			
 			for (var i = 0; i < ds_list_size(_ds); i ++)
 			{
 				with (_ds[| i])
 				{
-					if (i < 1)
-					{
-						id_arr = [id];
-					}
-					
-					if (object_get_parent(object_index) == obj_moving_platform_parent)
-					{
-						continue;
-					}
+					id_arr = [id];
 					
 					//Work on: Moving PLatform deletion...
 					
@@ -252,9 +256,11 @@ if (global.edit)
 					{
 						with (obj_moving_platform_parent)
 						{
-							if (place_meeting(x, y, other))
+							if (collision_point(mouse_x, mouse_y, other, false, true) != noone)
 							{
-								continue;
+								global.go = false;
+								
+								break;
 							}
 						}
 						
@@ -288,21 +294,36 @@ if (global.edit)
 						}
 					}
 					
-					global.hist[global.hNum] = ["Delete", id_arr];
-					global.hNum ++;
-					
-					array_resize(global.hist, global.hNum);
-					
-					for (var i = 0; i < array_length(id_arr); i ++)
+					if (global.go && (editLayer == global.Layer || global.Layer < 0))
 					{
-						instance_deactivate_object(id_arr[i]);
+						global.hist[global.hNum] = ["Delete", id_arr];
+						global.hNum ++;
+						
+						array_resize(global.hist, global.hNum);
+						
+						for (var j = 0; j < array_length(id_arr); j ++)
+						{
+							instance_deactivate_object(id_arr[j]);
+						}
+						
+						other.lchanged = true;
 					}
-					
-					other.lchanged = true;
+				}
+				
+				if (_b)
+				{
+					global.go = false;
+						
+					break;
 				}
 			}
 			
 			ds_list_destroy(_ds);
+		}
+		
+		if (mouse_check_button_released(mb_right))
+		{
+			global.go = true;
 		}
 	}
 	
@@ -420,6 +441,7 @@ if (global.edit)
 					
 					global.hNum ++;
 					
+					obj_editor_control.wpN = 0;
 					obj_editor_control.wpPlace = [];
 				}
 			}
@@ -428,12 +450,12 @@ if (global.edit)
 	
 	if (global.expanded)
 	{
-		var hover_l = false,
-			hover_r = false;
-		
 		draw_set_font(font_main);
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_middle);
+		
+		var hover_l = false,
+			hover_r = false;
 		
 		draw_rectangle(_x, _y, _x + 55, _y + 16, false);
 		
@@ -483,6 +505,110 @@ if (global.edit)
 			}
 			
 			draw_sprite_ext(spr_arrow, hover_r, _x + 50, _y + 8, 1, 1, 0, $FFFFFF, 1);
+		}
+	}
+	
+	draw_set_font(font_main);
+	draw_set_halign(fa_right);
+	draw_set_valign(fa_middle);
+	
+	var hover_l = false,
+		hover_r = false,
+		_txt = string(global.Layer),
+		_w = string_width(string(global.Layer));
+	
+	if (global.Layer < 0)
+	{
+		_txt = "All";
+	}
+	
+	draw_rectangle(_x2, _y2, _x2 - 39, _y2 - 15, true);
+	draw_rectangle(_x2, _y2, _x2 - 40, _y2 - 16, true);
+	draw_rectangle(_x2, _y2, _x2 - 41, _y2 - 17, true);
+	
+	draw_set_alpha(0.5);
+	
+	draw_rectangle(_x2, _y2, _x2 - 40, _y2 - 16, false);
+	
+	draw_set_color($000000);
+	
+	draw_text(_x2 - 9, _y2 - 5, _txt);
+	
+	draw_set_color($FFFFFF);
+	draw_set_alpha(1.0);
+	
+	draw_text(_x2 - 10, _y2 - 6, _txt);
+	
+	//Left button
+	if (global.Layer >= 0)
+	{
+		if (point_in_rectangle(mouse_x, mouse_y, _x2 - _w - 18, _y2 - 10, _x2 - _w - 13, _y2 - 2))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				global.Layer --;
+			}
+			
+			hover_l = true;
+		}
+		
+		else
+		{
+			hover_l = false;
+		}
+		
+		if (keyboard_check_pressed(vk_left))
+		{
+			global.Layer --;
+		}
+		
+		draw_sprite_ext(spr_arrow, hover_l, _x2 - _w - 15, _y2 - 6, -1, 1, 0, $FFFFFF, 1);
+	}
+	
+	//Right button
+	if (global.Layer < global.maxLayer)
+	{
+		if (point_in_rectangle(mouse_x, mouse_y, _x2 - 9, _y2 - 10, _x2 - 4, _y2 - 2))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				global.Layer ++;
+			}
+			
+			hover_r = true;
+		}
+		
+		else
+		{
+			hover_r = false;
+		}
+		
+		if (keyboard_check_pressed(vk_right))
+		{
+			global.Layer ++;
+		}
+		
+		draw_sprite_ext(spr_arrow, hover_r, _x2 - 6, _y2 - 6, 1, 1, 0, $FFFFFF, 1);
+	}
+	
+	with (obj_object_parent)
+	{
+		if (global.Layer > -1)
+		{
+			if (editLayer == global.Layer)
+			{
+				image_alpha = 1;
+			}
+			
+			else
+			{
+				image_alpha = 0.5;
+			}
+		}
+		
+		else
+		{
+			image_alpha = 1;
 		}
 	}
 	

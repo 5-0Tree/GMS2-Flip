@@ -1,5 +1,6 @@
 /// @description Init
 
+editLayer = 0;
 selected = false;
 
 hazard = false;

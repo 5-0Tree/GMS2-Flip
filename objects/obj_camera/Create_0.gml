@@ -22,8 +22,8 @@ if (global.edit)
 	y = room_height / 2;
 }
 
-x = clamp(x, 64, room_width - global.WIDTH / 2 - 64);
-y = clamp(y, 64, room_height - global.HEIGHT / 2 - 64);
+x = clamp(x, 0, room_width - global.WIDTH / 2);
+y = clamp(y, 0, room_height - global.HEIGHT / 2);
 
 ZOOM = 1;
 

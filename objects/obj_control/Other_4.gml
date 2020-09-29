@@ -24,7 +24,11 @@ if (!instance_exists(obj_editor_control))
 	global.edit = false;
 }
 
+depth = 100;
+
 fullscreen = window_get_fullscreen();
+
+showGrid = true;
 
 global.screenRotSpd = 5;
 global.screenAngle = 0;

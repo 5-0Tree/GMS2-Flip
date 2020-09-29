@@ -30,8 +30,8 @@ if (!global.edit)
 
 else
 {
-	x = clamp(x, 64, room_width - global.WIDTH / 2 - 64);
-	y = clamp(y, 64, room_height - global.HEIGHT / 2 - 64);
+	x = clamp(x, 0, room_width - global.WIDTH / 2);
+	y = clamp(y, 0, room_height - global.HEIGHT / 2);
 	
 	global.editX = x;
 	global.editY = y;
