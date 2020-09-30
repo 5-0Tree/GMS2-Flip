@@ -1,7 +1,4 @@
-
-///@description pow(x, n)
-///@param x
-///@param n
+/// @description pow(x, n)
 
 function pow(x, n)
 {

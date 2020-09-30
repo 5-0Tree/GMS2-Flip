@@ -37,7 +37,7 @@ function save_level(level_name)
 	
 	with (obj_object_parent)
 	{
-		data += "{" + 
+		data += "{" +
 				string(object_index) +
 				", " +
 				string(image_angle) +

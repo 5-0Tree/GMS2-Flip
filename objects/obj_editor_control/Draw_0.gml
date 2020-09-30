@@ -12,8 +12,8 @@ if (global.edit)
 {
 	//surface_set_target(surfGUI);
 	
-	grid_x = clamp(grid_x, 0, room_width - global.WIDTH / 2);
-	grid_y = clamp(grid_y, 0, room_height - global.HEIGHT / 2);
+	grid_x = floor(clamp(grid_x, 0, room_width - global.WIDTH / 2) / 16) * 16;
+	grid_y = floor(clamp(grid_y, 0, room_height - global.HEIGHT / 2) / 16) * 16;
 	
 	if (mouse_x < _x + 56 && mouse_y > _y + 16)
 	{
@@ -50,7 +50,7 @@ if (global.edit)
 	}
 	
 	if (mouse_x > 58 * global.expanded + _x && !(mouse_x > _x2 - 40 && mouse_y > _y2 - 16) &&
-	 !keyboard_check(vk_control) && !keyboard_check(vk_space) && !expandPressed && !clickingButton)
+	 !keyboard_check(vk_space) && !expandPressed && !clickingButton)
 	{
 		if (object_exists(selObj))
 		{
@@ -76,167 +76,227 @@ if (global.edit)
 				}
 			}
 			
-			draw_sprite_ext(object_get_sprite(selObj), 0, grid_x + 8, grid_y + 8, 1, 1, angle, $FFFFFF, 1);
-		
-			if ((mouse_check_button_pressed(mb_left) && selObj == obj_waypoint) ^^ (mouse_check_button(mb_left) && selObj != obj_waypoint))
+			if (!altMenu && !keyboard_check(vk_control))
 			{
-				var can_place = false,
-					_ds = ds_list_create();
+				draw_sprite_ext(object_get_sprite(selObj), 0, grid_x + 8, grid_y + 8, 1, 1, angle, $FFFFFF, 1);
 				
-				if (collision_point(grid_x + 8, grid_y + 8, obj_object_parent, false, true) != noone)
+				if ((mouse_check_button_pressed(mb_left) && selObj == obj_waypoint) ^^ (mouse_check_button(mb_left) && selObj != obj_waypoint))
 				{
-					if (selObj == obj_waypoint)
+					with (obj_object_parent)
 					{
-						if (collision_point(grid_x + 8, grid_y + 8, obj_waypoint, false, true) != noone)
+						selected = false;	
+					}
+					
+					var can_place = false,
+						_ds = ds_list_create();
+					
+					if (collision_point(grid_x + 8, grid_y + 8, obj_object_parent, false, true) != noone)
+					{
+						if (selObj == obj_waypoint)
 						{
-							can_place = false;
+							if (collision_point(grid_x + 8, grid_y + 8, obj_waypoint, false, true) != noone)
+							{
+								can_place = false;
+							}
+							
+							else
+							{
+								can_place = true;
+							}
 						}
 						
 						else
 						{
-							can_place = true;
+							collision_point_list(grid_x + 8, grid_y + 8, obj_object_parent, false, true, _ds, false);
+							
+							for (var i = 0; i < ds_list_size(_ds); i ++)
+							{
+								if (_ds[| i].object_index == obj_waypoint)
+								{
+									can_place = true;
+								}
+								
+								else
+								{
+									can_place = false;
+									
+									break;
+								}
+							}
 						}
 					}
 					
 					else
 					{
-						collision_point_list(grid_x + 8, grid_y + 8, obj_object_parent, false, true, _ds, false);
-						
-						for (var i = 0; i < ds_list_size(_ds); i ++)
-						{
-							if (_ds[| i].object_index == obj_waypoint)
-							{
-								can_place = true;
-							}
-							
-							else
-							{
-								can_place = false;
-								
-								break;
-							}
-						}
-					}
-				}
-				
-				else
-				{
-					can_place = true;
-				}
-				
-				if (ds_list_size(_ds) > 0)
-				{
-					if (_ds[| 0].object_index == obj_spikes)
-					{
 						can_place = true;
 					}
-				}
-				
-				ds_list_destroy(_ds);
-				
-				if (can_place)
-				{
-					with (instance_create_layer(grid_x + 8, grid_y + 8, "Objects", selObj))
+					
+					if (ds_list_size(_ds) > 0)
 					{
-						var id_arr = [id],
-							_b = false,
-							_p = false;
-						
-						if (object_index == obj_waypoint)
+						if (_ds[| 0].object_index == obj_spikes)
 						{
-							_p = true;
+							can_place = true;
+						}
+					}
+					
+					ds_list_destroy(_ds);
+					
+					if (can_place)
+					{
+						with (instance_create_layer(grid_x + 8, grid_y + 8, "Objects", selObj))
+						{
+							var id_arr = [id],
+								_b = false,
+								_p = false;
 							
-							wpID = other.wpID;
-							wpNum = other.wpNum;
-							wpType = other.wpType;
-							
-							with (obj_waypoint)
+							if (object_index == obj_waypoint)
 							{
-								if (wpID == other.wpID)
+								_p = true;
+								
+								wpID = other.wpID;
+								wpNum = other.wpNum;
+								wpType = other.wpType;
+								
+								with (obj_waypoint)
 								{
-									if (wpType == 1)
+									if (wpID == other.wpID)
 									{
-										pl[other.wpNum] = [other.x, other.y];
+										if (wpType == 1)
+										{
+											pl[other.wpNum] = [other.x, other.y];
+										}
 									}
 								}
-							}
-							
-							other.wpNum ++;
-							
-							if (other.wpType == 1)
-							{
-								other.wpType = 0;
-							}
-							
-							with (obj_waypoint)
-							{
-								if (wpID == other.wpID)
+								
+								other.wpNum ++;
+								
+								if (other.wpType == 1)
 								{
-									id_arr[obj_editor_control.wpN] = id;
-									
-									obj_editor_control.wpN ++;
+									other.wpType = 0;
 								}
-							}
-							
-							other.wpPlace = id_arr;
-						}
-						
-						image_angle = other.angle;
-						
-						if (object_index == obj_spikes)
-						{
-							var _ds = ds_list_create();
-							
-							collision_point_list(x, y, obj_spikes, false, true, _ds, false);
-							
-							for (var i = 0; i < ds_list_size(_ds); i ++)
-							{
-								with (_ds[| i])
+								
+								with (obj_waypoint)
 								{
-									if (dsin(image_angle) == dsin(other.image_angle) && dcos(image_angle) == dcos(other.image_angle))
+									if (wpID == other.wpID)
 									{
-										instance_destroy(other);
-									
-										_b = true;
+										id_arr[obj_editor_control.wpN] = id;
+										
+										obj_editor_control.wpN ++;
 									}
 								}
+								
+								other.wpPlace = id_arr;
 							}
 							
-							ds_list_destroy(_ds);
-						}
-						
-						if (object_index == obj_player)
-						{
-							defAng = image_angle;
+							image_angle = other.angle;
 							
-							rot = -defAng;
-						}
-						
-						editLayer = max(0, global.Layer);
-						
-						a_origin = image_angle;
-						x_origin = x;
-						y_origin = y;
-						
-						if (!_b)
-						{
-							global.hist[global.hNum] = ["Add", id_arr];
-							
-							if (!_p)
+							if (object_index == obj_spikes)
 							{
-								global.hNum ++;
+								var _ds = ds_list_create();
+								
+								collision_point_list(x, y, obj_spikes, false, true, _ds, false);
+								
+								for (var i = 0; i < ds_list_size(_ds); i ++)
+								{
+									with (_ds[| i])
+									{
+										if (dsin(image_angle) == dsin(other.image_angle) && dcos(image_angle) == dcos(other.image_angle))
+										{
+											instance_destroy(other);
+										
+											_b = true;
+										}
+									}
+								}
+								
+								ds_list_destroy(_ds);
 							}
 							
-							array_resize(global.hist, global.hNum);
+							if (object_index == obj_player)
+							{
+								defAng = image_angle;
+								
+								rot = -defAng;
+							}
+							
+							editLayer = max(0, global.Layer);
+							
+							a_origin = image_angle;
+							x_origin = x;
+							y_origin = y;
+							
+							if (!_b)
+							{
+								global.hist[global.hNum] = ["Add", id_arr];
+								
+								if (!_p)
+								{
+									global.hNum ++;
+								}
+								
+								array_resize(global.hist, global.hNum);
+							}
+							
+							other.lchanged = true;
 						}
-						
-						other.lchanged = true;
+					}
+					
+					if (keyboard_check(vk_alt))
+					{
+						altMenu = true;
 					}
 				}
 			}
 		}
 		
-		if (mouse_check_button(mb_right))
+		if (altMenu)
+		{
+			
+		}
+		
+		if (keyboard_check(vk_control))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				selectX = mouse_x + 1;
+				selectY = mouse_y + 1;
+			}
+			
+			if (mouse_check_button(mb_left))
+			{
+				draw_set_color($00FF00);
+				draw_set_alpha(0.5);
+				
+				draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, false);
+				
+				draw_set_alpha(1.0);
+				
+				draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, true);
+				
+				draw_set_color($FFFFFF);
+				
+				with (obj_object_parent)
+				{
+					selected = false;
+				}
+				
+				var _ds = ds_list_create();
+				
+				collision_rectangle_list(selectX, selectY, mouse_x, mouse_y, obj_object_parent, false, true, _ds, false);
+				
+				for (var i = 0; i < ds_list_size(_ds); i ++)
+				{
+					with (_ds[| i])
+					{
+						selected = true;
+					}
+				}
+				
+				ds_list_destroy(_ds);
+			}
+		}
+		
+		if (mouse_check_button(mb_right) && !altMenu)
 		{
 			var _ds = ds_list_create(),
 				_b = false,
@@ -325,6 +385,12 @@ if (global.edit)
 		{
 			global.go = true;
 		}
+	}
+	
+	if (!mouse_check_button(mb_left))
+	{
+		selectX = mouse_x + 1;
+		selectY = mouse_y + 1;
 	}
 	
 	if (global.expanded)

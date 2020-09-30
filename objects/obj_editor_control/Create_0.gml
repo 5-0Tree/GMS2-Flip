@@ -32,6 +32,12 @@ expandPressed = false;
 
 clickingButton = false;
 
+altMenu = false;
+altInst = noone;
+
+selectX = 0;
+selectY = 0;
+
 global.hist = [];
 global.hNum = 0;
 
@@ -43,6 +49,7 @@ objs = {
 		obj_wall_4
 	], Active : [
 		obj_box_1,
+		obj_button,
 		obj_waypoint,
 		obj_wall_sp_mp_1,
 		obj_wall_sp_anti

@@ -1,15 +1,15 @@
 {
   "spriteId": {
-    "name": "spr_wall_sp_anti",
-    "path": "sprites/spr_wall_sp_anti/spr_wall_sp_anti.yy",
+    "name": "spr_button",
+    "path": "sprites/spr_button/spr_button.yy",
   },
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "obj_collision_parent",
-    "path": "objects/obj_collision_parent/obj_collision_parent.yy",
+    "name": "obj_button_parent",
+    "path": "objects/obj_button_parent/obj_button_parent.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -23,7 +23,10 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"obj_button","path":"objects/obj_button/obj_button.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":2,"eventType":3,"collisionObjectId":null,"parent":{"name":"obj_button","path":"objects/obj_button/obj_button.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
@@ -31,7 +34,7 @@
     "path": "folders/Objects/interactive.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_wall_sp_anti",
+  "name": "obj_button",
   "tags": [],
   "resourceType": "GMObject",
 }

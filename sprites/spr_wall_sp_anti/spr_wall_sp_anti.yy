@@ -70,8 +70,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"05f53c64-e8c5-45aa-bfd2-65ed0dfc9a60","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "special",
-    "path": "folders/Sprites/blocks/special.yy",
+    "name": "interactives",
+    "path": "folders/Sprites/interactives.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_wall_sp_anti",

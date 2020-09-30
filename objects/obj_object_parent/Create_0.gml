@@ -3,6 +3,8 @@
 editLayer = 0;
 selected = false;
 
+editables = [];
+
 hazard = false;
 
 fall = false;

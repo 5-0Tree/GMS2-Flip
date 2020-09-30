@@ -1,4 +1,4 @@
-///@description toggle_edit()
+/// @description toggle_edit()
 
 function toggle_editor()
 {
@@ -8,6 +8,11 @@ function toggle_editor()
 	
 	global.screenAngle = 0;
 	global.angleFix = 0;
+	
+	if (instance_exists(obj_editor_control))
+	{
+		obj_editor_control.altMenu = false;
+	}
 	
 	if (instance_exists(obj_camera))
 	{
@@ -20,38 +25,40 @@ function toggle_editor()
 			yTo = global.editY;
 		}
 	}
-	
+	with (obj_object_parent)
 	{
-		with (obj_dynamic_parent)
+		selected = false;
+	}
+	
+	with (obj_dynamic_parent)
+	{
+		fall = false;
+		movable = true;
+		move = false;
+		canMove = false;
+		canFall = true;
+		
+		image_alpha = 1;
+		image_angle = a_origin;
+		x = x_origin;
+		y = y_origin;
+		
+		if (object_get_parent(object_index) == obj_moving_platform_parent)
 		{
-			fall = false;
-			movable = true;
-			move = false;
-			canMove = false;
-			canFall = true;
+			atEnd = false;
 			
-			image_alpha = 1;
-			image_angle = a_origin;
-			x = x_origin;
-			y = y_origin;
+			wpPoint = 0;
+		}
+		
+		if (object_index == obj_player)
+		{
+			a = 0;
+			defAng = image_angle;
 			
-			if (object_get_parent(object_index) == obj_moving_platform_parent)
-			{
-				atEnd = false;
-				
-				wpPoint = 0;
-			}
+			rot = -defAng;
 			
-			if (object_index == obj_player)
-			{
-				a = 0;
-				defAng = image_angle;
-				
-				rot = -defAng;
-				
-				xO = x;
-				yO = y;
-			}
+			xO = x;
+			yO = y;
 		}
 	}
 }

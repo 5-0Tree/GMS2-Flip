@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "spr_wall_sp_anti",
-    "path": "sprites/spr_wall_sp_anti/spr_wall_sp_anti.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
@@ -23,15 +20,17 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"obj_button_parent","path":"objects/obj_button_parent/obj_button_parent.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "interactive",
-    "path": "folders/Objects/interactive.yy",
+    "name": "parents",
+    "path": "folders/Objects/parents.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_wall_sp_anti",
+  "name": "obj_button_parent",
   "tags": [],
   "resourceType": "GMObject",
 }
