@@ -23,4 +23,6 @@ wpType = 0;
 
 moveSpeed = 4;
 
+group = 0;
+
 pl = [];

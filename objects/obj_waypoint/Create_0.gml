@@ -14,6 +14,4 @@ wpID = 0;
 wpNum = 0;
 wpType = 0;
 
-moveSpeed = 4;
-
 pl[0] = [x, y];

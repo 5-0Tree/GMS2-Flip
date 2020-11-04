@@ -18,8 +18,8 @@ if (!global.edit)
 		_spd = spd;
 	}
 	
-	x += (xTo - x) / _spd;
-	y += (yTo - y) / _spd;
+	x += (xTo - x + 0.5) / _spd;
+	y += (yTo - y - 0.5) / _spd;
 	
 	if (instance_number(obj_player) == 1)
 	{
@@ -37,8 +37,8 @@ else
 	global.editY = y;
 }
 
-var CANG = dcos(global.screenAngle),
-	SANG = dsin(global.screenAngle),
+var CANG = floor(dcos(global.screenAngle) * 100) / 100,
+	SANG = floor(dsin(global.screenAngle) * 100) / 100,
 	vm = matrix_build_lookat(x, y, -100, x, y, 0, SANG, CANG, 0);
 
 camera_set_view_mat(cam, vm);

@@ -25,9 +25,12 @@ function toggle_editor()
 			yTo = global.editY;
 		}
 	}
+	
 	with (obj_object_parent)
 	{
 		selected = false;
+		
+		image_alpha = 1;
 	}
 	
 	with (obj_dynamic_parent)

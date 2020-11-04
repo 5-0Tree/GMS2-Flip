@@ -2,26 +2,17 @@
 
 event_inherited();
 
-depth = 10;
-
-startCon = "Player Over";
-atEnd = false;
-
-wp = noone;
-wpPoint = 0;
-
-init = false;
-
 AccAttr = {
 	Main : {
 		Color : image_blend,
 		Angle : image_angle,
 		Alpha : image_alpha,
-		Group : group
+		Group : group,
+		Layer : editLayer
 	},
 	Active : {
-		Locked : locked,
-		Condition : startCon,
+		Locked : undefined,
+		Condition : undefined,
 		Speed : undefined,
 		Trigger : undefined
 	}

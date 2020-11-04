@@ -243,15 +243,155 @@ if (global.edit)
 					
 					if (keyboard_check(vk_alt))
 					{
+						var col = true,
+							ang = true,
+							alp = true,
+							grp = true,
+							lay = true,
+							loc = true,
+							con = true,
+							spe = true,
+							trg = true,
+							vnm = 0,
+							aar = [col, ang, alp, grp, lay, loc, con, spe, trg],
+							bar = [],
+							car = [];
+						
+						with (obj_object_parent)
+						{
+							/*
+							Main : {
+								Color : undefined,
+								Angle : undefined,
+								Alpha : undefined,
+								Group : undefined,
+								Layer : undefined
+							},
+							Active : {
+								Locked : undefined,
+								Condition : undefined,
+								Speed : undefined,
+								Trigger : undefined
+							}
+							*/
+							
+							if (selected)
+							{
+								if (AccAttr.Main.Color == undefined && col)
+								{
+									col = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Color;
+									vnm ++;
+								}
+								
+								if (AccAttr.Main.Angle == undefined && ang)
+								{
+									ang = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Angle;
+									vnm ++;
+								}
+								
+								if (AccAttr.Main.Alpha == undefined && alp)
+								{
+									alp = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Alpha;
+									vnm ++;
+								}
+								
+								if (AccAttr.Main.Color == undefined && grp)
+								{
+									grp = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Group;
+									vnm ++;
+								}
+								
+								if (AccAttr.Main.Layer == undefined && lay)
+								{
+									lay = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Layer;
+									vnm ++;
+								}
+								
+								if (AccAttr.Active.Locked == undefined && loc)
+								{
+									loc = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Locked;
+									vnm ++;
+								}
+								
+								if (AccAttr.Active.Condition == undefined && con)
+								{
+									con = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Condition;
+									vnm ++;
+								}
+								
+								if (AccAttr.Active.Speed == undefined && spe)
+								{
+									spe = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Speed;
+									vnm ++;
+								}
+								
+								if (AccAttr.Active.Trigger == undefined && trg)
+								{
+									trg = false;
+								}
+								
+								else
+								{
+									bar[vnm] = AccAttr.Main.Trigger;
+									vnm ++;
+								}
+							}
+						}
+						
+						//Work on alt menu...
+						
+						for (var i = 0; i < array_length(aar); i ++)
+						{
+							if (aar[i])
+							{
+								draw_text(_x + 48, _y + 16 + i * 8, "ArrValue");
+							}
+						}
+						
 						altMenu = true;
 					}
 				}
 			}
-		}
-		
-		if (altMenu)
-		{
-			
 		}
 		
 		if (keyboard_check(vk_control))
@@ -425,12 +565,12 @@ if (global.edit)
 			
 			if (o < array_length(variable_struct_get(objs, objNames[selCat])))
 			{
-				if (point_in_rectangle(mouse_x, mouse_y, _x + xx - 8, _y + yy - 8, _x + xx + 8, _y + yy + 8))
+				if (point_in_rectangle(mouse_x, mouse_y, _x + xx - 8, _y + yy - 8, _x + xx + 8, _y + yy + 8) && !altMenu)
 				{
 					draw_set_color($FFDEAA);
 					draw_set_alpha(0.8);
 					
-					if (mouse_check_button_pressed(mb_left))
+					if (mouse_check_button_pressed(mb_left) && !altMenu)
 					{
 						if (selObj != variable_struct_get(objs, objNames[selCat])[o])
 						{
@@ -443,8 +583,8 @@ if (global.edit)
 						}
 					}
 					
-					draw_roundrect_ext(_x + xx - 10, _y + yy - 10, _x + xx + 8, _y + yy + 8, 1, 1, true);
-				
+					draw_rectangle(_x + xx - 10, _y + yy - 10, _x + xx + 10, _y + yy + 10, true);
+					
 					draw_set_color($FFFFFF);
 					draw_set_alpha(1.0);
 				}
@@ -459,11 +599,11 @@ if (global.edit)
 					draw_set_color($FFDEAA);
 					draw_set_alpha(0.6);
 					
-					draw_roundrect_ext(_x + xx - 10, _y + yy - 10, _x + xx + 8, _y + yy + 8, 1, 1, false);
+					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 9, _y + yy + 9, false);
 					
 					draw_set_alpha(0.8);
 					
-					draw_roundrect_ext(_x + xx - 10, _y + yy - 10, _x + xx + 8, _y + yy + 8, 1, 1, true);
+					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 9, _y + yy + 9, true);
 					
 					draw_set_color($FFFFFF);
 					draw_set_alpha(1.0);
@@ -675,6 +815,16 @@ if (global.edit)
 		else
 		{
 			image_alpha = 1;
+		}
+	}
+	
+	if (altMenu)
+	{
+		draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
+		
+		if (keyboard_check_pressed(vk_escape))
+		{
+			altMenu = false;
 		}
 	}
 	

@@ -65,6 +65,22 @@ objs = {
 	]
 };
 
+altAttr = {
+	Main : {
+		Color : undefined,
+		Angle : undefined,
+		Alpha : undefined,
+		Group : undefined,
+		Layer : undefined
+	},
+	Active : {
+		Locked : undefined,
+		Condition : undefined,
+		Speed : undefined,
+		Trigger : undefined
+	}
+};
+
 objNames = variable_struct_get_names(objs);
 
 for (var i = 0; i < array_length(objNames); i ++)
