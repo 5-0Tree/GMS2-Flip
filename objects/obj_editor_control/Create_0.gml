@@ -83,7 +83,7 @@ altAttr = {
 
 objNames = variable_struct_get_names(objs);
 
-for (var i = 0; i < array_length(objNames); i ++)
+for (var i = 0; i < array_length(objNames) + 1; i ++)
 {
 	scroll[i] = 0;
 }

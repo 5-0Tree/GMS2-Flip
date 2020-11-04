@@ -22,7 +22,7 @@ if (global.edit)
 	
 	scroll[selCat] = clamp(scroll[selCat], -max(0, ceil(array_length(variable_struct_get(objs, objNames[selCat])) / 2 + 1) * 24 - global.HEIGHT), 0);
 	
-	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, global.editY - 4, _x + 54 * global.expanded + 6, global.editY + 4))
+	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, global.editY - 4, _x + 54 * global.expanded + 6, global.editY + 4) && !altMenu)
 	{
 		if (mouse_check_button_pressed(mb_left))
 		{
@@ -240,156 +240,27 @@ if (global.edit)
 							other.lchanged = true;
 						}
 					}
-					
-					if (keyboard_check(vk_alt))
+				}
+			}
+		}
+		
+		if (selObj == -1 && keyboard_check(vk_alt))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				var _go = false;
+				
+				with (collision_point(mouse_x, mouse_y, obj_object_parent, false, true))
+				{
+					if (selected)
 					{
-						var col = true,
-							ang = true,
-							alp = true,
-							grp = true,
-							lay = true,
-							loc = true,
-							con = true,
-							spe = true,
-							trg = true,
-							vnm = 0,
-							aar = [col, ang, alp, grp, lay, loc, con, spe, trg],
-							bar = [],
-							car = [];
-						
-						with (obj_object_parent)
-						{
-							/*
-							Main : {
-								Color : undefined,
-								Angle : undefined,
-								Alpha : undefined,
-								Group : undefined,
-								Layer : undefined
-							},
-							Active : {
-								Locked : undefined,
-								Condition : undefined,
-								Speed : undefined,
-								Trigger : undefined
-							}
-							*/
-							
-							if (selected)
-							{
-								if (AccAttr.Main.Color == undefined && col)
-								{
-									col = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Color;
-									vnm ++;
-								}
-								
-								if (AccAttr.Main.Angle == undefined && ang)
-								{
-									ang = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Angle;
-									vnm ++;
-								}
-								
-								if (AccAttr.Main.Alpha == undefined && alp)
-								{
-									alp = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Alpha;
-									vnm ++;
-								}
-								
-								if (AccAttr.Main.Color == undefined && grp)
-								{
-									grp = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Group;
-									vnm ++;
-								}
-								
-								if (AccAttr.Main.Layer == undefined && lay)
-								{
-									lay = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Layer;
-									vnm ++;
-								}
-								
-								if (AccAttr.Active.Locked == undefined && loc)
-								{
-									loc = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Locked;
-									vnm ++;
-								}
-								
-								if (AccAttr.Active.Condition == undefined && con)
-								{
-									con = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Condition;
-									vnm ++;
-								}
-								
-								if (AccAttr.Active.Speed == undefined && spe)
-								{
-									spe = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Speed;
-									vnm ++;
-								}
-								
-								if (AccAttr.Active.Trigger == undefined && trg)
-								{
-									trg = false;
-								}
-								
-								else
-								{
-									bar[vnm] = AccAttr.Main.Trigger;
-									vnm ++;
-								}
-							}
-						}
-						
-						//Work on alt menu...
-						
-						for (var i = 0; i < array_length(aar); i ++)
-						{
-							if (aar[i])
-							{
-								draw_text(_x + 48, _y + 16 + i * 8, "ArrValue");
-							}
-						}
-						
-						altMenu = true;
+						_go = true;
 					}
+				}
+				
+				if (_go)
+				{
+					altMenu = true;
 				}
 			}
 		}
@@ -821,6 +692,163 @@ if (global.edit)
 	if (altMenu)
 	{
 		draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
+		
+		var col = true,
+			ang = true,
+			alp = true,
+			grp = true,
+			lay = true,
+			loc = true,
+			con = true,
+			spe = true,
+			trg = true,
+			vnm = 0,
+			bar = [],
+			car = ["Color", "Angle", "Alpha", "Group", "Layer", "Locked", "Condition", "Speed", "Trigger"];
+		
+		with (obj_object_parent)
+		{
+			/*
+			Main : {
+				Color : undefined,
+				Angle : undefined,
+				Alpha : undefined,
+				Group : undefined,
+				Layer : undefined
+			},
+			Active : {
+				Locked : undefined,
+				Condition : undefined,
+				Speed : undefined,
+				Trigger : undefined
+			}
+			*/
+			
+			if (selected)
+			{
+				if (accAttr.Main.Color == undefined && col)
+				{
+					col = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Main.Color;
+					vnm ++;
+				}
+				
+				if (accAttr.Main.Angle == undefined && ang)
+				{
+					ang = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Main.Angle;
+					vnm ++;
+				}
+				
+				if (accAttr.Main.Alpha == undefined && alp)
+				{
+					alp = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Main.Alpha;
+					vnm ++;
+				}
+								
+				if (accAttr.Main.Color == undefined && grp)
+				{
+					grp = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Main.Group;
+					vnm ++;
+				}
+				
+				if (accAttr.Main.Layer == undefined && lay)
+				{
+					lay = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Main.Layer;
+					vnm ++;
+				}
+				
+				if (accAttr.Active.Locked == undefined && loc)
+				{
+					loc = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Active.Locked;
+					vnm ++;
+				}
+				
+				if (accAttr.Active.Condition == undefined && con)
+				{
+					con = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Active.Condition;
+					vnm ++;
+				}
+				
+				if (accAttr.Active.Speed == undefined && spe)
+				{
+					spe = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Active.Speed;
+					vnm ++;
+				}
+				
+				if (accAttr.Active.Trigger == undefined && trg)
+				{
+					trg = false;
+				}
+				
+				else
+				{
+					bar[vnm] = accAttr.Active.Trigger;
+					vnm ++;
+				}
+			}
+		}
+		
+		//Work on alt menu...
+		
+		var aar = [col, ang, alp, grp, lay, loc, con, spe, trg],
+			__n = 0;
+		
+		draw_set_halign(fa_left);
+		draw_set_color($000000);
+		
+		for (var i = 0; i < array_length(aar); i ++)
+		{
+			if (aar[i])
+			{
+				draw_text(_x + 48, _y + 16 + (i - __n) * 12, car[i]);
+			}
+			
+			else
+			{
+				__n ++;
+			}
+		}
+		
+		draw_set_color($FFFFFF);
 		
 		if (keyboard_check_pressed(vk_escape))
 		{

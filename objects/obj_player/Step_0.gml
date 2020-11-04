@@ -1,5 +1,7 @@
 /// @description Move
 
+event_inherited();
+
 if (fall)
 {
 	image_index = 1;

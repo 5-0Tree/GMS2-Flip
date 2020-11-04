@@ -4,7 +4,7 @@ event_inherited();
 
 moveSpeed = 4;
 
-AccAttr = {
+accAttr = {
 	Main : {
 		Color : undefined,
 		Angle : undefined,

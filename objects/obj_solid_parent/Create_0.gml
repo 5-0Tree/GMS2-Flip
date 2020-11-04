@@ -2,7 +2,7 @@
 
 event_inherited();
 
-AccAttr = {
+accAttr = {
 	Main : {
 		Color : image_blend,
 		Angle : image_angle,

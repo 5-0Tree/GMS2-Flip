@@ -12,12 +12,13 @@ wpPoint = 0;
 
 init = false;
 
-AccAttr = {
+accAttr = {
 	Main : {
 		Color : image_blend,
 		Angle : image_angle,
 		Alpha : image_alpha,
-		Group : group
+		Group : group,
+		Layer : editLayer
 	},
 	Active : {
 		Locked : locked,
