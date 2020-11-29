@@ -30,7 +30,7 @@ function toggle_editor()
 	{
 		selected = false;
 		
-		image_alpha = 1;
+		image_alpha = alpha;
 	}
 	
 	with (obj_dynamic_parent)
@@ -41,7 +41,6 @@ function toggle_editor()
 		canMove = false;
 		canFall = true;
 		
-		image_alpha = 1;
 		image_angle = a_origin;
 		x = x_origin;
 		y = y_origin;

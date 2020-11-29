@@ -1,17 +1,15 @@
-/// @description Init
-
-event_inherited();
+/// @description Update Values
 
 accAttr = {
 	Main : {
-		Color : color,
-		Angle : image_angle,
-		Alpha : alpha,
+		Color : undefined,
+		Angle : undefined,
+		Alpha : undefined,
 		Group : group,
 		Layer : editLayer,
 		Locked : undefined,
 		Condition : undefined,
-		Speed : undefined,
+		Speed : moveSpeed,
 		Trigger : undefined
 	}
 };

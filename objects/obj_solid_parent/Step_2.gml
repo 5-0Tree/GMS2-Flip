@@ -7,8 +7,8 @@ accAttr = {
 		Alpha : alpha,
 		Group : group,
 		Layer : editLayer,
-		Locked : locked,
-		Condition : startCon,
+		Locked : undefined,
+		Condition : undefined,
 		Speed : undefined,
 		Trigger : undefined
 	}

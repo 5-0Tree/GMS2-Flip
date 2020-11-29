@@ -265,7 +265,7 @@ if (global.edit)
 			}
 		}
 		
-		if (keyboard_check(vk_control))
+		if (keyboard_check(vk_shift))
 		{
 			if (mouse_check_button_pressed(mb_left))
 			{
@@ -547,12 +547,15 @@ if (global.edit)
 		{
 			if (point_in_rectangle(mouse_x, mouse_y, _x + 4, _y + 4, _x + 9, _y + 12))
 			{
-				if (mouse_check_button_pressed(mb_left))
+				if (!altMenu)
 				{
-					selCat --;
+					if (mouse_check_button_pressed(mb_left))
+					{
+						selCat --;
+					}
+					
+					hover_l = true;
 				}
-				
-				hover_l = true;
 			}
 			
 			else
@@ -568,12 +571,15 @@ if (global.edit)
 		{
 			if (point_in_rectangle(mouse_x, mouse_y, _x + 47, _y + 4, _x + 52, _y + 12))
 			{
-				if (mouse_check_button_pressed(mb_left))
+				if (!altMenu)
 				{
-					selCat ++;
+					if (mouse_check_button_pressed(mb_left) && !altMenu)
+					{
+						selCat ++;
+					}
+					
+					hover_r = true;
 				}
-				
-				hover_r = true;
 			}
 			
 			else
@@ -621,12 +627,15 @@ if (global.edit)
 	{
 		if (point_in_rectangle(mouse_x, mouse_y, _x2 - _w - 18, _y2 - 10, _x2 - _w - 13, _y2 - 2))
 		{
-			if (mouse_check_button_pressed(mb_left))
+			if (!altMenu)
 			{
-				global.Layer --;
+				if (mouse_check_button_pressed(mb_left))
+				{
+					global.Layer --;
+				}
+				
+				hover_l = true;
 			}
-			
-			hover_l = true;
 		}
 		
 		else
@@ -647,12 +656,15 @@ if (global.edit)
 	{
 		if (point_in_rectangle(mouse_x, mouse_y, _x2 - 9, _y2 - 10, _x2 - 4, _y2 - 2))
 		{
-			if (mouse_check_button_pressed(mb_left))
+			if (!altMenu)
 			{
-				global.Layer ++;
+				if (mouse_check_button_pressed(mb_left))
+				{
+					global.Layer ++;
+				}
+				
+				hover_r = true;
 			}
-			
-			hover_r = true;
 		}
 		
 		else
@@ -691,6 +703,14 @@ if (global.edit)
 	
 	if (altMenu)
 	{
+		draw_set_color($000000);
+		draw_set_alpha(0.5);
+		
+		draw_rectangle(_x, _y, _x2, _y2, false);
+		
+		draw_set_color($FFFFFF);
+		draw_set_alpha(1.0);
+		
 		draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
 		
 		var col = true,
@@ -702,144 +722,107 @@ if (global.edit)
 			con = true,
 			spe = true,
 			trg = true,
-			vnm = 0,
-			bar = [],
-			car = ["Color", "Angle", "Alpha", "Group", "Layer", "Locked", "Condition", "Speed", "Trigger"];
+			aar = [col, ang, alp, grp, lay, loc, con, spe, trg],
+			bar = ["Color", "Angle", "Alpha", "Group", "Layer", "Locked", "Condition", "Speed", "Trigger"];
 		
-		with (obj_object_parent)
+		for (var i = 0; i < array_length(aar); i ++)
 		{
-			/*
-			Main : {
-				Color : undefined,
-				Angle : undefined,
-				Alpha : undefined,
-				Group : undefined,
-				Layer : undefined
-			},
-			Active : {
-				Locked : undefined,
-				Condition : undefined,
-				Speed : undefined,
-				Trigger : undefined
-			}
-			*/
-			
-			if (selected)
-			{
-				if (accAttr.Main.Color == undefined && col)
-				{
-					col = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Main.Color;
-					vnm ++;
-				}
-				
-				if (accAttr.Main.Angle == undefined && ang)
-				{
-					ang = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Main.Angle;
-					vnm ++;
-				}
-				
-				if (accAttr.Main.Alpha == undefined && alp)
-				{
-					alp = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Main.Alpha;
-					vnm ++;
-				}
-								
-				if (accAttr.Main.Color == undefined && grp)
-				{
-					grp = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Main.Group;
-					vnm ++;
-				}
-				
-				if (accAttr.Main.Layer == undefined && lay)
-				{
-					lay = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Main.Layer;
-					vnm ++;
-				}
-				
-				if (accAttr.Active.Locked == undefined && loc)
-				{
-					loc = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Active.Locked;
-					vnm ++;
-				}
-				
-				if (accAttr.Active.Condition == undefined && con)
-				{
-					con = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Active.Condition;
-					vnm ++;
-				}
-				
-				if (accAttr.Active.Speed == undefined && spe)
-				{
-					spe = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Active.Speed;
-					vnm ++;
-				}
-				
-				if (accAttr.Active.Trigger == undefined && trg)
-				{
-					trg = false;
-				}
-				
-				else
-				{
-					bar[vnm] = accAttr.Active.Trigger;
-					vnm ++;
-				}
-			}
+			aar[i] = alt_edit(obj_object_parent, "Main", bar[i], aar[i]);
 		}
 		
 		//Work on alt menu...
 		
-		var aar = [col, ang, alp, grp, lay, loc, con, spe, trg],
-			__n = 0;
+		var __n = 0;
 		
-		draw_set_halign(fa_left);
 		draw_set_color($000000);
 		
 		for (var i = 0; i < array_length(aar); i ++)
 		{
-			if (aar[i])
+			if (aar[i][0] != -1)
 			{
-				draw_text(_x + 48, _y + 16 + (i - __n) * 12, car[i]);
+				var _v = undefined,
+					_t = undefined;
+				
+				draw_set_halign(fa_left);
+				
+				draw_text(_x + 48, _y + 16 + (i - __n) * 12, bar[i]);
+				
+				draw_set_halign(fa_right);
+				
+				if (array_length(aar[i]) > 1)
+				{
+					for (var j = 0; j < array_length(aar[i]); j ++)
+					{
+						if (j > 0)
+						{
+							if (_v != aar[i][j])
+							{
+								_t = "Mixed";
+								
+								break;
+							}
+						}
+						
+						_v = aar[i][j];
+					}
+					
+					if (_t != "Mixed")
+					{
+						_t = _v;
+					}
+				}
+				
+				else
+				{
+					_t = aar[i][0];
+				}
+				
+				if (bar[i] == "Color")
+				{
+					if (_t == "Mixed")
+					{
+						draw_text(_x2 - 52, _y + 16 + (i - __n) * 12, "?");
+					}
+					
+					else
+					{
+						draw_set_color(_t);
+						
+						draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 12, _x2 - 49, _y + 23 + (i - __n) * 12, false);
+					}
+					
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 12, _x2 - 48, _y + 24 + (i - __n) * 12))
+					{
+						draw_set_color($FFDEAA);
+					}
+					
+					else
+					{
+						draw_set_color($000000);
+					}
+					
+					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 12, _x2 - 49, _y + 23 + (i - __n) * 12, true);
+					
+					draw_set_color($FFFFFF);
+				}
+				
+				else
+				{
+					if (bar[i] == "Locked")
+					{
+						if (_t)
+						{
+							_t = "True";
+						}
+						
+						else
+						{
+							_t = "False";
+						}
+					}
+					
+					draw_text(_x2 - 48, _y + 16 + (i - __n) * 12, _t);
+				}
 			}
 			
 			else

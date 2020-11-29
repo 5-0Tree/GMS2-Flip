@@ -1,4 +1,4 @@
-/// @description Falling
+/// @description Falling & Update Values
 
 event_inherited();
 
@@ -24,3 +24,17 @@ if (movable && !global.edit)
 		}
 	}
 }
+
+accAttr = {
+	Main : {
+		Color : color,
+		Angle : image_angle,
+		Alpha : alpha,
+		Group : group,
+		Layer : editLayer,
+		Locked : locked,
+		Condition : undefined,
+		Speed : undefined,
+		Trigger : undefined
+	}
+};

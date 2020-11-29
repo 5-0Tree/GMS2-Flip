@@ -33,7 +33,7 @@ expandPressed = false;
 clickingButton = false;
 
 altMenu = false;
-altInst = noone;
+colMenu = false;
 
 selectX = 0;
 selectY = 0;
@@ -47,7 +47,7 @@ objs = {
 		obj_wall_2,
 		obj_wall_3,
 		obj_wall_4
-	], Active : [
+	], Main : [
 		obj_box_1,
 		obj_button,
 		obj_waypoint,
@@ -71,9 +71,7 @@ altAttr = {
 		Angle : undefined,
 		Alpha : undefined,
 		Group : undefined,
-		Layer : undefined
-	},
-	Active : {
+		Layer : undefined,
 		Locked : undefined,
 		Condition : undefined,
 		Speed : undefined,

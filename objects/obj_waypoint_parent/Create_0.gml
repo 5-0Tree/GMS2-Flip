@@ -10,9 +10,7 @@ accAttr = {
 		Angle : undefined,
 		Alpha : undefined,
 		Group : group,
-		Layer : editLayer
-	},
-	Active : {
+		Layer : editLayer,
 		Locked : undefined,
 		Condition : undefined,
 		Speed : moveSpeed,

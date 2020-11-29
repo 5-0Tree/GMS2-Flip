@@ -14,13 +14,11 @@ init = false;
 
 accAttr = {
 	Main : {
-		Color : image_blend,
+		Color : color,
 		Angle : image_angle,
-		Alpha : image_alpha,
+		Alpha : alpha,
 		Group : group,
-		Layer : editLayer
-	},
-	Active : {
+		Layer : editLayer,
 		Locked : locked,
 		Condition : startCon,
 		Speed : undefined,
