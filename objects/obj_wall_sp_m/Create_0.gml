@@ -2,6 +2,8 @@
 
 event_inherited();
 
+image_speed = 0;
+
 hazard = true;
 haz_color = 1;
 

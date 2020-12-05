@@ -2,6 +2,20 @@
 
 if (global.edit)
 {
+	if (!altMenu)
+	{
+		if (keyboard_check(vk_alt))
+		{
+			if (keyboard_check_pressed(ord("D")))
+			{
+				with (obj_object_parent)
+				{
+					selected = false;
+				}
+			}
+		}
+	}
+	
 	if (keyboard_check_pressed(ord("Q")))
 	{
 		angle += 90;
@@ -33,6 +47,11 @@ if (global.edit)
 		
 		if (keyboard_check_pressed(ord("Z")) && array_length(wpPlace) == 0)
 		{
+			with (obj_object_parent)
+			{
+				selected = false;
+			}
+			
 			//Redo
 			if (keyboard_check(vk_shift))
 			{

@@ -35,6 +35,9 @@ clickingButton = false;
 altMenu = false;
 colMenu = false;
 
+selCol = $FFFFFF;
+colChg = false;
+
 selectX = 0;
 selectY = 0;
 
@@ -47,7 +50,7 @@ objs = {
 		obj_wall_2,
 		obj_wall_3,
 		obj_wall_4
-	], Main : [
+	], Active : [
 		obj_box_1,
 		obj_button,
 		obj_waypoint,

@@ -244,23 +244,34 @@ if (global.edit)
 			}
 		}
 		
-		if (selObj == -1 && keyboard_check(vk_alt))
+		if (selObj == -1)
 		{
 			if (mouse_check_button_pressed(mb_left))
 			{
-				var _go = false;
-				
-				with (collision_point(mouse_x, mouse_y, obj_object_parent, false, true))
+				if (keyboard_check(vk_alt))
 				{
-					if (selected)
+					var _go = false;
+					
+					with (collision_point(mouse_x, mouse_y, obj_object_parent, false, true))
 					{
-						_go = true;
+						if (selected)
+						{
+							_go = true;
+						}
+					}
+					
+					if (_go && !keyboard_check(vk_shift))
+					{
+						altMenu = true;
 					}
 				}
 				
-				if (_go)
+				else if (!keyboard_check(vk_shift) && !altMenu)
 				{
-					altMenu = true;
+					with (obj_object_parent)
+					{
+						selected = false;
+					}
 				}
 			}
 		}
@@ -273,37 +284,46 @@ if (global.edit)
 				selectY = mouse_y + 1;
 			}
 			
-			if (mouse_check_button(mb_left))
+			if (selObj == -1)
 			{
-				draw_set_color($00FF00);
-				draw_set_alpha(0.5);
-				
-				draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, false);
-				
-				draw_set_alpha(1.0);
-				
-				draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, true);
-				
-				draw_set_color($FFFFFF);
-				
-				with (obj_object_parent)
+				if (mouse_check_button(mb_left))
 				{
-					selected = false;
-				}
-				
-				var _ds = ds_list_create();
-				
-				collision_rectangle_list(selectX, selectY, mouse_x, mouse_y, obj_object_parent, false, true, _ds, false);
-				
-				for (var i = 0; i < ds_list_size(_ds); i ++)
-				{
-					with (_ds[| i])
+					draw_set_color($00FF00);
+					draw_set_alpha(0.5);
+					
+					draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, false);
+					
+					draw_set_alpha(1.0);
+					
+					draw_rectangle(selectX, selectY, mouse_x - 1, mouse_y - 1, true);
+					
+					draw_set_color($FFFFFF);
+					
+					if (!keyboard_check(vk_alt))
 					{
-						selected = true;
+						with (obj_object_parent)
+						{
+							selected = false;
+						}
 					}
+					
+					var _ds = ds_list_create();
+					
+					collision_rectangle_list(selectX, selectY, mouse_x, mouse_y, obj_object_parent, false, true, _ds, false);
+					
+					for (var i = 0; i < ds_list_size(_ds); i ++)
+					{
+						with (_ds[| i])
+						{
+							if (editLayer == global.Layer || global.Layer == -1)
+							{
+								selected = true;
+							}
+						}
+					}
+					
+					ds_list_destroy(_ds);
 				}
-				
-				ds_list_destroy(_ds);
 			}
 		}
 		
@@ -454,7 +474,7 @@ if (global.edit)
 						}
 					}
 					
-					draw_rectangle(_x + xx - 10, _y + yy - 10, _x + xx + 10, _y + yy + 10, true);
+					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 8, _y + yy + 8, true);
 					
 					draw_set_color($FFFFFF);
 					draw_set_alpha(1.0);
@@ -470,11 +490,11 @@ if (global.edit)
 					draw_set_color($FFDEAA);
 					draw_set_alpha(0.6);
 					
-					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 9, _y + yy + 9, false);
+					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 8, _y + yy + 8, false);
 					
 					draw_set_alpha(0.8);
 					
-					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 9, _y + yy + 9, true);
+					draw_rectangle(_x + xx - 9, _y + yy - 9, _x + xx + 8, _y + yy + 8, true);
 					
 					draw_set_color($FFFFFF);
 					draw_set_alpha(1.0);
@@ -704,7 +724,7 @@ if (global.edit)
 	if (altMenu)
 	{
 		draw_set_color($000000);
-		draw_set_alpha(0.5);
+		draw_set_alpha(0.3);
 		
 		draw_rectangle(_x, _y, _x2, _y2, false);
 		
@@ -738,7 +758,14 @@ if (global.edit)
 		
 		for (var i = 0; i < array_length(aar); i ++)
 		{
-			if (aar[i][0] != -1)
+			var g = false;
+			
+			if (array_length(aar[i]) > 0)
+			{
+				g = true;
+			}
+			
+			if (g && aar[i][0] != -1)
 			{
 				var _v = undefined,
 					_t = undefined;
@@ -779,6 +806,11 @@ if (global.edit)
 				
 				if (bar[i] == "Color")
 				{
+					if (colChg)
+					{
+						_t = selCol;
+					}
+					
 					if (_t == "Mixed")
 					{
 						draw_text(_x2 - 52, _y + 16 + (i - __n) * 12, "?");
@@ -791,9 +823,14 @@ if (global.edit)
 						draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 12, _x2 - 49, _y + 23 + (i - __n) * 12, false);
 					}
 					
-					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 12, _x2 - 48, _y + 24 + (i - __n) * 12))
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 12, _x2 - 48, _y + 24 + (i - __n) * 12) && !colMenu)
 					{
 						draw_set_color($FFDEAA);
+						
+						if (mouse_check_button_pressed(mb_left))
+						{
+							colMenu = true;
+						}
 					}
 					
 					else
@@ -833,10 +870,94 @@ if (global.edit)
 		
 		draw_set_color($FFFFFF);
 		
-		if (keyboard_check_pressed(vk_escape))
+		if (keyboard_check_pressed(vk_escape) && !colMenu)
 		{
+			with (obj_object_parent)
+			{
+				if (selected)
+				{
+					if (other.colChg)
+					{
+						color = other.selCol;
+					}
+				}
+			}
+			
+			selCol = $FFFFFF;
+			colChg = false;
+			
 			altMenu = false;
 		}
+	}
+	
+	if (colMenu)
+	{
+		draw_set_color($000000);
+		draw_set_alpha(0.3);
+		
+		draw_rectangle(_x, _y, _x2, _y2, false);
+		
+		draw_set_color($FFFFFF);
+		draw_set_alpha(1.0);
+		
+		draw_rectangle(_x + 32, _y + 16, _x2 - 32, _y2 - 16, false);
+		
+		draw_circle(global.editX, global.editY, 8, false);
+		
+		if (point_in_circle(mouse_x, mouse_y, global.editX, global.editY, 8))
+		{
+			draw_set_color($FFDEAA);
+			
+			if (mouse_check_button_pressed(mb_left))
+			{
+				selCol = $FFFFFF;
+				colChg = true;
+				
+				colMenu = false;
+			}
+		}
+		
+		else
+		{
+			draw_set_color($000000);
+		}
+		
+		draw_circle(global.editX, global.editY, 8, true);
+		
+		for (var i = 1; i < 256; i += 17)
+		{
+			var cx = floor(global.editX + lengthdir_x(32, (i - 1) / 255 * 360 + 180)),
+				cy = floor(global.editY + lengthdir_y(32, (i - 1) / 255 * 360 + 180)),
+				ccol = make_color_hsv(i - 1, 255, 255);
+			
+			draw_circle_color(cx, cy, 5, ccol, ccol, false);
+			
+			if (point_in_circle(mouse_x, mouse_y, cx, cy, 5))
+			{
+				draw_set_color($FFDEAA);
+				
+				if (mouse_check_button_pressed(mb_left))
+				{
+					selCol = ccol;
+					colChg = true;
+					
+					colMenu = false;
+				}
+			}
+			
+			else
+			{
+				draw_set_color($000000);
+			}
+			
+			draw_circle(cx, cy, 5, true);
+		}
+		
+		if (keyboard_check_pressed(vk_escape))
+		{
+			colMenu = false;
+		}
+		
 	}
 	
 	//draw_clear_alpha($FFFFFF, 0);

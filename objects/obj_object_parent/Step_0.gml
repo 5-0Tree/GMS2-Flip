@@ -7,5 +7,5 @@ if (selected)
 
 else
 {
-	image_blend = $FFFFFF;
+	image_blend = color;
 }

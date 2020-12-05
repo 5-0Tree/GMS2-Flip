@@ -18,8 +18,8 @@ if (!global.edit)
 		_spd = spd;
 	}
 	
-	x += (xTo - x + 0.5) / _spd;
-	y += (yTo - y - 0.5) / _spd;
+	x += (xTo - x) / _spd;
+	y += (yTo - y) / _spd;
 	
 	if (instance_number(obj_player) == 1)
 	{

@@ -21,3 +21,5 @@ r = sqrt(sqr(sprite_width / 2) + sqr(sprite_height / 2));
 
 xO = x;
 yO = y;
+
+accAttr.Main.Color = undefined;

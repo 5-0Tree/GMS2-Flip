@@ -1,6 +1,6 @@
 {
   "hinting": 0,
-  "glyphOperations": 10,
+  "glyphOperations": 2,
   "interpreter": 0,
   "pointRounding": 0,
   "fontName": "Pixel Tactical",
