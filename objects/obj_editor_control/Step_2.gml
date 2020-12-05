@@ -14,93 +14,93 @@ if (global.edit)
 				}
 			}
 		}
-	}
-	
-	if (keyboard_check_pressed(ord("Q")))
-	{
-		angle += 90;
-	}
-	
-	if (keyboard_check_pressed(ord("E")))
-	{
-		angle -= 90;
-	}
-	
-	if (keyboard_check(vk_control))
-	{
-		if (keyboard_check_pressed(ord("S")))
+		
+		if (keyboard_check_pressed(ord("Q")))
 		{
-			//Save as
-			if (keyboard_check(vk_shift))
-			{
-				
-			}
-			
-			//Save
-			else
-			{
-				save_level(lname);
-			}
-			
-			lchanged = false;
+			angle += 90;
 		}
 		
-		if (keyboard_check_pressed(ord("Z")) && array_length(wpPlace) == 0)
+		if (keyboard_check_pressed(ord("E")))
 		{
-			with (obj_object_parent)
+			angle -= 90;
+		}
+		
+		if (keyboard_check(vk_control))
+		{
+			if (keyboard_check_pressed(ord("S")))
 			{
-				selected = false;
+				//Save as
+				if (keyboard_check(vk_shift))
+				{
+					
+				}
+				
+				//Save
+				else
+				{
+					save_level(lname);
+				}
+				
+				lchanged = false;
 			}
 			
-			//Redo
-			if (keyboard_check(vk_shift))
+			if (keyboard_check_pressed(ord("Z")) && array_length(wpPlace) == 0)
 			{
-				if (global.hNum < array_length(global.hist))
+				with (obj_object_parent)
 				{
-					if (global.hist[global.hNum][0] == "Add")
+					selected = false;
+				}
+				
+				//Redo
+				if (keyboard_check(vk_shift))
+				{
+					if (global.hNum < array_length(global.hist))
 					{
-						for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+						if (global.hist[global.hNum][0] == "Add")
 						{
-							instance_activate_object(global.hist[global.hNum][1][i]);
+							for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+							{
+								instance_activate_object(global.hist[global.hNum][1][i]);
+							}
+							
+							global.hNum ++;
 						}
 						
-						global.hNum ++;
-					}
-					
-					else if (global.hist[global.hNum][0] == "Delete")
-					{
-						for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+						else if (global.hist[global.hNum][0] == "Delete")
 						{
-							instance_deactivate_object(global.hist[global.hNum][1][i]);
+							for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+							{
+								instance_deactivate_object(global.hist[global.hNum][1][i]);
+							}
+							
+							global.hNum ++;
 						}
-						
-						global.hNum ++;
 					}
 				}
-			}
-			
-			//Undo
-			else
-			{
-				if (global.hNum > 0)
+				
+				//Undo
+				else
 				{
-					if (global.hist[global.hNum - 1][0] == "Add")
+					if (global.hNum > 0)
 					{
-						global.hNum --;
-						
-						for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+						if (global.hist[global.hNum - 1][0] == "Add")
 						{
-							instance_deactivate_object(global.hist[global.hNum][1][i]);
+							global.hNum --;
+							
+							for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+							{
+								instance_deactivate_object(global.hist[global.hNum][1][i]);
+							}
 						}
-					}
-					
-					else if (global.hist[global.hNum - 1][0] == "Delete")
-					{
-						global.hNum --;
 						
-						for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+						else if (global.hist[global.hNum - 1][0] == "Delete")
 						{
-							instance_activate_object(global.hist[global.hNum][1][i]);
+							global.hNum --;
+							
+							for (var i = 0; i < array_length(global.hist[global.hNum][1]); i ++)
+							{
+								instance_activate_object(global.hist[global.hNum][1][i]);
+							}
 						}
 					}
 				}

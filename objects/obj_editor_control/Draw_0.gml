@@ -8,7 +8,7 @@ var _x = global.editX - global.WIDTH / 2,
 	grid_y = floor(mouse_y / 16) * 16,
 	_sel = selObj;
 
-if (global.edit)
+if (global.edit)       
 {
 	//surface_set_target(surfGUI);
 	
@@ -131,7 +131,7 @@ if (global.edit)
 						can_place = true;
 					}
 					
-					if (ds_list_size(_ds) > 0)
+					if (ds_list_size(_ds) == 1)
 					{
 						if (_ds[| 0].object_index == obj_spikes)
 						{
@@ -515,6 +515,14 @@ if (global.edit)
 	
 	draw_rectangle(_x + 54 * global.expanded, _y + global.HEIGHT / 2 - 5, _x + 54 * global.expanded + 6, _y + global.HEIGHT / 2 + 4, false);
 	draw_sprite_ext(spr_arrow, expandPressed, _x + global.expanded * 53 + 4, _y + global.HEIGHT / 2, expandDir, 1, 0, $FFFFFF, 1);
+	
+	if (!altMenu)
+	{
+		if (keyboard_check_pressed(ord("V")))
+		{
+			selObj = -1;
+		}
+	}
 	
 	if (keyboard_check_pressed(vk_escape) || keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_f2) || _sel != selObj || mouse_check_button_pressed(mb_right))
 	{
