@@ -8,7 +8,7 @@ active = false;
 
 locked = false;
 cond = "Player Over";
-trigger = noone;
+trigger = [noone];
 
 accAttr = {
 	Main : {

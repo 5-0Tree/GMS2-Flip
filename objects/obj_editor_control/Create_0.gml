@@ -34,9 +34,12 @@ clickingButton = false;
 
 altMenu = false;
 colMenu = false;
+trgMenu = false;
 
 selCol = $FFFFFF;
 colChg = false;
+
+trgTar = [noone];
 
 selectX = 0;
 selectY = 0;

@@ -341,8 +341,6 @@ if (global.edit)
 				{
 					id_arr = [id];
 					
-					//Work on: Moving PLatform deletion...
-					
 					if (object_index == obj_waypoint)
 					{
 						with (obj_moving_platform_parent)
@@ -731,15 +729,18 @@ if (global.edit)
 	
 	if (altMenu)
 	{
-		draw_set_color($000000);
-		draw_set_alpha(0.3);
-		
-		draw_rectangle(_x, _y, _x2, _y2, false);
-		
-		draw_set_color($FFFFFF);
-		draw_set_alpha(1.0);
-		
-		draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
+		if (!trgMenu)
+		{
+			draw_set_color($000000);
+			draw_set_alpha(0.4);
+			
+			draw_rectangle(_x, _y, _x2, _y2, false);
+			
+			draw_set_color($FFFFFF);
+			draw_set_alpha(1.0);
+			
+			draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
+		}
 		
 		var col = true,
 			ang = true,
@@ -762,10 +763,10 @@ if (global.edit)
 		
 		var __n = 0;
 		
-		draw_set_color($000000);
-		
 		for (var i = 0; i < array_length(aar); i ++)
 		{
+			draw_set_color($000000);
+			
 			var g = false;
 			
 			if (array_length(aar[i]) > 0)
@@ -773,14 +774,14 @@ if (global.edit)
 				g = true;
 			}
 			
-			if (g && aar[i][0] != -1)
+			if (g && aar[i][0] != -1 && !trgMenu)
 			{
 				var _v = undefined,
 					_t = undefined;
 				
 				draw_set_halign(fa_left);
 				
-				draw_text(_x + 48, _y + 16 + (i - __n) * 12, bar[i]);
+				draw_text(_x + 48, _y + 16 + (i - __n) * 16, bar[i]);
 				
 				draw_set_halign(fa_right);
 				
@@ -821,17 +822,17 @@ if (global.edit)
 					
 					if (_t == "Mixed")
 					{
-						draw_text(_x2 - 52, _y + 16 + (i - __n) * 12, "?");
+						draw_text(_x2 - 51, _y + 17 + (i - __n) * 16, "?");
 					}
 					
 					else
 					{
 						draw_set_color(_t);
 						
-						draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 12, _x2 - 49, _y + 23 + (i - __n) * 12, false);
+						draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, false);
 					}
 					
-					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 12, _x2 - 48, _y + 24 + (i - __n) * 12) && !colMenu)
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 16, _x2 - 48, _y + 24 + (i - __n) * 16) && !colMenu)
 					{
 						draw_set_color($FFDEAA);
 						
@@ -846,9 +847,44 @@ if (global.edit)
 						draw_set_color($000000);
 					}
 					
-					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 12, _x2 - 49, _y + 23 + (i - __n) * 12, true);
+					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, true);
 					
 					draw_set_color($FFFFFF);
+				}
+				
+				else if (bar[i] == "Trigger")
+				{
+					draw_sprite(spr_target, 0, _x2 - 56, _y + 16 + (i - __n) * 16);
+					
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 16, _x2 - 48, _y + 24 + (i - __n) * 16) && !trgMenu)
+					{
+						draw_set_color($FFDEAA);
+						
+						if (mouse_check_button_pressed(mb_left))
+						{
+							var iv = 0;
+							
+							with (obj_object_parent)
+							{
+								if (selected)
+								{
+									other.trgTar[iv] = id;
+									
+									iv ++;
+								}
+							}
+							
+							trgMenu = true;
+						}
+					}
+					
+					else
+					{
+						draw_set_color($000000);
+					}
+					
+					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, true);
+					
 				}
 				
 				else
@@ -866,7 +902,7 @@ if (global.edit)
 						}
 					}
 					
-					draw_text(_x2 - 48, _y + 16 + (i - __n) * 12, _t);
+					draw_text(_x2 - 48, _y + 16 + (i - __n) * 16, _t);
 				}
 			}
 			
@@ -898,10 +934,71 @@ if (global.edit)
 		}
 	}
 	
+	if (trgMenu)
+	{
+		draw_set_color($FFFFFF);
+		draw_set_alpha(1.0);
+		
+		draw_circle(_x2 - 12, _y + 12, 12, false);
+		
+		var hover = false;
+		
+		if (point_in_circle(mouse_x, mouse_y, _x2 - 12, _y + 12, 12))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				trgMenu = false;
+			}
+			
+			hover = true;
+		}
+		
+		else
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				var _c = ds_list_create();
+				
+				collision_point_list(mouse_x, mouse_y, obj_object_parent, false, true, _c, true);
+				
+				if (ds_list_size(_c) > 0)
+				{
+					for (var i = 0; i < ds_list_size(_c); i ++)
+					{
+						with (_c[| i])
+						{
+							if (accAttr.Main.Condition == "Button Active")
+							{
+								for (var j = 0; j < array_length(other.trgTar); j ++)
+								{
+									with (other.trgTar[j])
+									{
+										accAttr.Main.Trigger = other.id;
+									}
+								}
+								
+								other.trgMenu = false;
+							}
+						}
+					}
+				}
+			}
+			
+			hover = false;
+		}
+		
+		draw_sprite_ext(spr_arrow, hover, _x2 - 12, _y + 12, -1, 1, 0, $FFFFFF, 1);
+		
+		if (keyboard_check_pressed(vk_escape))
+		{
+			trgMenu = false;
+		}
+	}
+	
 	if (colMenu)
 	{
 		draw_set_color($000000);
-		draw_set_alpha(0.3);
+		draw_set_alpha(0.4);
 		
 		draw_rectangle(_x, _y, _x2, _y2, false);
 		

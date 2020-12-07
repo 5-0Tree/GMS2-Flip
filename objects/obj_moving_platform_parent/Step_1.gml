@@ -2,7 +2,7 @@
 
 var sw = sprite_width,
 	sh = sprite_height,
-	_c = collision_point(x - sw / 1.5 * dsin(image_angle), y - sh / 1.5 * dcos(image_angle), obj_player, false, true),
+	_c = collision_point(x - sw / 1.5 * dsin(image_angle), y - sh / 1.5 * dcos(image_angle), obj_dynamic_parent, false, true),
 	_o = collision_point(x, y, obj_waypoint, false, true);
 
 if (!init)
@@ -28,15 +28,55 @@ if (!init)
 
 if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_angle) == dcos(global.angleFix)))
 {
-	if (startCon == "Player Over")
+	if (_c != noone)
 	{
-		if (_c != noone)
+		with (_c)
 		{
-			with (_c)
+			if (other.startCon == "Player Over")
+			{
+				if (object_index == obj_player)
+				{
+					if (!fall)
+					{
+						other.canMove = true;
+					}
+				}
+			}
+			
+			if (other.startCon == "Active Over")
 			{
 				if (!fall)
 				{
 					other.canMove = true;
+				}
+			}
+			
+			if (other.startCon == "Enemy Over")
+			{
+				if (hazard)
+				{
+					if (!fall)
+					{
+						other.canMove = true;
+					}
+				}
+			}
+		}
+	}
+	
+	if (startCon == "Button Active")
+	{
+		with (obj_button_parent)
+		{
+			for (var i = 0; i < array_length(trigger); i ++)
+			{
+				if (trigger[i] == id)
+				{
+					if (active)
+					{
+						other.canMove = true;
+						break;
+					}
 				}
 			}
 		}

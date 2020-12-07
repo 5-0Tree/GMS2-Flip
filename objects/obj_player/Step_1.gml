@@ -1,60 +1,188 @@
-/// @description Gravity Controls
+/// @description Move
 
-var nn = 0;
+event_inherited();
 
-with (obj_dynamic_parent)
+if (fall)
 {
-	nn ++;
+	image_index = 1;
 }
 
-global.canRotate = true;
-
-for (var i = 0; i < nn; i ++)
+else if (canFall)
 {
-	with (instance_find(obj_dynamic_parent, i))
-	{
-		if (move || fall)
-		{
-			global.canRotate = false;
-		}
-	}
+	image_index = 0;
 }
 
-var sw = sprite_width,
-	sh = sprite_height;
-
-if (collision_line(x - sw, y, x + sw, y, obj_wall_sp_anti, false, true) == noone &&
-	collision_line(x, y - sh, x, y + sh, obj_wall_sp_anti, false, true) == noone && !global.edit)
+if (image_index == 0 && !global.edit && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 {
-	with (obj_dynamic_parent)
+	var dir = keyboard_check(vk_right) - keyboard_check(vk_left),
+		af = global.angleFix,
+		sw = sprite_width,
+		sh = sprite_height,
+		hw = sw / 2,
+		hh = sh / 2,
+		cl = ds_list_create(),
+		cc = collision_point(x + sw * dcos(image_angle), y - sh * dsin(image_angle), obj_collision_parent, false, true),
+		cm = collision_point(x - sw * dcos(image_angle), y + sh * dsin(image_angle), obj_collision_parent, false, true);
+	
+	collision_point_list(x, y, obj_object_parent, false, true, cl, false);
+	
+	if (!ds_list_empty(cl))
 	{
-		if (movable)
+		for (var i = 0; i < ds_list_size(cl); i ++)
 		{
-			if (!move && !fall && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0 && global.canRotate)
+			with (cl[| i])
 			{
-				if (keyboard_check_pressed(ord("W")))
+				if (hazard)
 				{
-					global.angleFix += 180;
-				
-					global.canRotate = false;
-				}
-			
-				if (keyboard_check_pressed(ord("A")))
-				{
-					global.angleFix -= 90;
-				
-					global.canRotate = false;
-				}
-			
-				if (keyboard_check_pressed(ord("D")))
-				{
-					global.angleFix += 90;
-				
-					global.canRotate = false;
+					if (haz_color == 0)
+					{
+						global.gameOver = true;
+					}
 				}
 			}
 		}
 	}
+	
+	ds_list_destroy(cl);
+	
+	if (cc != noone)
+	{
+		with (cc)
+		{
+			if (hazard)
+			{
+				if (haz_color == -1)
+				{
+					if (haz_type == 0)
+					{
+						if (dcos(-other.image_angle) == dcos(image_angle - 90) &&
+							dsin(other.image_angle) == dsin(image_angle - 90))
+						{
+							global.gameOver = true;
+						}
+					}
+					
+					else if (haz_type == 1)
+					{
+						//1 Stuff...
+					}
+					
+					else if (haz_type == 2)
+					{
+						//2 Stuff...
+					}
+					
+					else if (haz_type == 3)
+					{
+						global.gameOver = true;
+					}
+				}
+			}
+		}
+	}
+	
+	if (cm != noone)
+	{
+		with (cm)
+		{
+			if (hazard)
+			{
+				if (haz_color == 1)
+				{
+					if (haz_type == 0)
+					{
+						if (dcos(other.image_angle) == dcos(image_angle + 90) &&
+							dsin(-other.image_angle) == dsin(image_angle - 90))
+						{
+							global.gameOver = true;
+						}
+					}
+					
+					else if (haz_type == 1)
+					{
+						//1 Stuff...
+					}
+					
+					else if (haz_type == 2)
+					{
+						//2 Stuff...
+					}
+					
+					else if (haz_type == 3)
+					{
+						global.gameOver = true;
+					}
+				}
+			}
+		}
+	}
+	
+	if (global.gameOver)
+	{
+		if (move)
+		{
+			global.gameOver = false;
+		}
+		
+		else if (room == rm_editor)
+		{
+			toggle_editor();
+			
+			exit;
+		}
+			
+		else
+		{
+			room_restart();
+		}
+	}
+	
+	if (abs(dir) == 1 && !move)
+	{
+		var _x = x + dir * dcos(af) * sw,
+			_y = y - dir * dsin(af) * sh,
+			_c = collision_point(_x, _y, obj_collision_parent, false, true),
+			go = true;
+		
+		with (_c)
+		{
+			go = false;
+		}
+		
+		if (go)
+		{
+			if (a == 0)
+			{
+				move = true;
+				
+				a = dir;
+				
+				rot += a * 90;
+				
+				xO = x + hw * -(a * pow(dcos(af), abs(dcos(af))) * -pow(a * dsin(af), abs(dsin(af))));
+				yO = y + hh * (a * pow(-dcos(af), abs(dcos(af))) * -a * pow(-a * -dsin(af), abs(dsin(af))));
+			}
+		}
+	}
+	
+	if (abs(a) = 1)
+	{
+		image_angle -= moveSpeed * a;
+			
+		x = xO + r * dcos(image_angle + rot + 45 + sign(-a + 1) * 90 + af);
+		y = yO - r * dsin(image_angle + rot + 45 + sign(-a + 1) * 90 + af);
+		
+		if (image_angle == defAng - a * rc * 90)
+		{
+			move = false;
+			
+			rot += a * (rc - 1) * 90;
+			rc = 1;
+			
+			a = 0;
+			defAng = image_angle;
+			
+			s = false;
+		}
+	}
 }
-
-canMove = !global.edit;
