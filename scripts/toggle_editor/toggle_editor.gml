@@ -28,6 +28,8 @@ function toggle_editor()
 	
 	with (obj_object_parent)
 	{
+		active = false;
+		
 		selected = false;
 		
 		image_alpha = alpha;

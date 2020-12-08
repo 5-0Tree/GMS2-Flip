@@ -32,7 +32,7 @@ if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_
 	{
 		with (_c)
 		{
-			if (other.startCon == "Player Over")
+			if (other.cond == other.accConds[0])
 			{
 				if (object_index == obj_player)
 				{
@@ -43,7 +43,7 @@ if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_
 				}
 			}
 			
-			if (other.startCon == "Active Over")
+			if (other.cond == other.accConds[1])
 			{
 				if (!fall)
 				{
@@ -51,7 +51,7 @@ if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_
 				}
 			}
 			
-			if (other.startCon == "Enemy Over")
+			if (other.cond == other.accConds[2])
 			{
 				if (hazard)
 				{
@@ -63,19 +63,21 @@ if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_
 			}
 		}
 	}
-	
-	if (startCon == "Button Active")
+}
+
+if (!global.edit)
+{
+	if (cond == accConds[3])
 	{
 		with (obj_button_parent)
 		{
 			for (var i = 0; i < array_length(trigger); i ++)
 			{
-				if (trigger[i] == id)
+				if (active)
 				{
-					if (active)
+					if (trigger[i] == other.id)
 					{
 						other.canMove = true;
-						break;
 					}
 				}
 			}

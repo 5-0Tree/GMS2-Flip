@@ -175,13 +175,15 @@ if (global.edit)
 									other.wpType = 0;
 								}
 								
+								var in = 0;
+								
 								with (obj_waypoint)
 								{
 									if (wpID == other.wpID)
 									{
-										id_arr[obj_editor_control.wpN] = id;
+										id_arr[in] = id;
 										
-										obj_editor_control.wpN ++;
+										in ++;
 									}
 								}
 								
@@ -343,29 +345,20 @@ if (global.edit)
 					
 					if (object_index == obj_waypoint)
 					{
-						with (obj_moving_platform_parent)
-						{
-							if (collision_point(mouse_x, mouse_y, other, false, true) != noone)
-							{
-								global.go = false;
-								
-								break;
-							}
-						}
-						
 						other.wpID ++;
 						other.wpNum = 0;
 						other.wpType = 1;
 						other.wpPlace = [];
 						
-						for (var j = 0; j < instance_number(obj_waypoint); j ++)
+						var in = 0;
+						
+						with (obj_waypoint)
 						{
-							with (instance_find(obj_waypoint, j))
+							if (wpID == other.wpID)
 							{
-								if (wpID == other.wpID)
-								{
-									id_arr[j] = id;
-								}
+								id_arr[in] = id;
+								
+								in ++;
 							}
 						}
 					}
@@ -544,7 +537,6 @@ if (global.edit)
 					
 					global.hNum ++;
 					
-					obj_editor_control.wpN = 0;
 					obj_editor_control.wpPlace = [];
 				}
 			}
@@ -781,7 +773,7 @@ if (global.edit)
 				
 				draw_set_halign(fa_left);
 				
-				draw_text(_x + 48, _y + 16 + (i - __n) * 16, bar[i]);
+				draw_text(_x + 48, _y + 12 + (i - __n) * 16, bar[i]);
 				
 				draw_set_halign(fa_right);
 				
@@ -822,17 +814,17 @@ if (global.edit)
 					
 					if (_t == "Mixed")
 					{
-						draw_text(_x2 - 51, _y + 17 + (i - __n) * 16, "?");
+						draw_text(_x2 - 51, _y + 13 + (i - __n) * 16, "?");
 					}
 					
 					else
 					{
 						draw_set_color(_t);
 						
-						draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, false);
+						draw_rectangle(_x2 - 63, _y + 5 + (i - __n) * 16, _x2 - 49, _y + 19 + (i - __n) * 16, false);
 					}
 					
-					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 16, _x2 - 48, _y + 24 + (i - __n) * 16) && !colMenu)
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 4 + (i - __n) * 16, _x2 - 48, _y + 20 + (i - __n) * 16) && !colMenu)
 					{
 						draw_set_color($FFDEAA);
 						
@@ -847,16 +839,55 @@ if (global.edit)
 						draw_set_color($000000);
 					}
 					
-					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, true);
+					draw_rectangle(_x2 - 63, _y + 5 + (i - __n) * 16, _x2 - 49, _y + 19 + (i - __n) * 16, true);
 					
 					draw_set_color($FFFFFF);
 				}
 				
+				else if (bar[i] == "Condition")
+				{
+					var tstr = _t;
+					
+					if (conChg)
+					{
+						tstr = selCon;
+					}
+					
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 50 - string_width(tstr), _y + 8 + (i - __n) * 16, _x2 - 48, _y + 14 + (i - __n) * 16) && !conMenu)
+					{
+						draw_set_color($FFDEAA);
+						
+						if (mouse_check_button_pressed(mb_left))
+						{
+							var iv = 0;
+							
+							with (obj_object_parent)
+							{
+								if (selected)
+								{
+									other.conTar[iv] = id;
+									
+									iv ++;
+								}
+							}
+							
+							conMenu = true;
+						}
+					}
+					
+					else
+					{
+						draw_set_color($000000);
+					}
+					
+					draw_text(_x2 - 48, _y + 12 + (i - __n) * 16, tstr);
+				}
+				
 				else if (bar[i] == "Trigger")
 				{
-					draw_sprite(spr_target, 0, _x2 - 56, _y + 16 + (i - __n) * 16);
+					draw_sprite(spr_target, 0, _x2 - 56, _y + 12 + (i - __n) * 16);
 					
-					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 8 + (i - __n) * 16, _x2 - 48, _y + 24 + (i - __n) * 16) && !trgMenu)
+					if (point_in_rectangle(mouse_x, mouse_y, _x2 - 64, _y + 4 + (i - __n) * 16, _x2 - 48, _y + 20 + (i - __n) * 16) && !trgMenu)
 					{
 						draw_set_color($FFDEAA);
 						
@@ -883,7 +914,7 @@ if (global.edit)
 						draw_set_color($000000);
 					}
 					
-					draw_rectangle(_x2 - 63, _y + 9 + (i - __n) * 16, _x2 - 49, _y + 23 + (i - __n) * 16, true);
+					draw_rectangle(_x2 - 63, _y + 5 + (i - __n) * 16, _x2 - 49, _y + 19 + (i - __n) * 16, true);
 					
 				}
 				
@@ -902,7 +933,7 @@ if (global.edit)
 						}
 					}
 					
-					draw_text(_x2 - 48, _y + 16 + (i - __n) * 16, _t);
+					draw_text(_x2 - 48, _y + 12 + (i - __n) * 16, _t);
 				}
 			}
 			
@@ -914,7 +945,7 @@ if (global.edit)
 		
 		draw_set_color($FFFFFF);
 		
-		if (keyboard_check_pressed(vk_escape) && !colMenu)
+		if (keyboard_check_pressed(vk_escape) && !colMenu && !conMenu)
 		{
 			with (obj_object_parent)
 			{
@@ -924,74 +955,21 @@ if (global.edit)
 					{
 						color = other.selCol;
 					}
+					
+					if (other.conChg)
+					{
+						cond = other.selCon;
+					}
 				}
 			}
 			
 			selCol = $FFFFFF;
 			colChg = false;
 			
+			selCon = "";
+			conChg = false;
+			
 			altMenu = false;
-		}
-	}
-	
-	if (trgMenu)
-	{
-		draw_set_color($FFFFFF);
-		draw_set_alpha(1.0);
-		
-		draw_circle(_x2 - 12, _y + 12, 12, false);
-		
-		var hover = false;
-		
-		if (point_in_circle(mouse_x, mouse_y, _x2 - 12, _y + 12, 12))
-		{
-			if (mouse_check_button_pressed(mb_left))
-			{
-				trgMenu = false;
-			}
-			
-			hover = true;
-		}
-		
-		else
-		{
-			if (mouse_check_button_pressed(mb_left))
-			{
-				var _c = ds_list_create();
-				
-				collision_point_list(mouse_x, mouse_y, obj_object_parent, false, true, _c, true);
-				
-				if (ds_list_size(_c) > 0)
-				{
-					for (var i = 0; i < ds_list_size(_c); i ++)
-					{
-						with (_c[| i])
-						{
-							if (accAttr.Main.Condition == "Button Active")
-							{
-								for (var j = 0; j < array_length(other.trgTar); j ++)
-								{
-									with (other.trgTar[j])
-									{
-										accAttr.Main.Trigger = other.id;
-									}
-								}
-								
-								other.trgMenu = false;
-							}
-						}
-					}
-				}
-			}
-			
-			hover = false;
-		}
-		
-		draw_sprite_ext(spr_arrow, hover, _x2 - 12, _y + 12, -1, 1, 0, $FFFFFF, 1);
-		
-		if (keyboard_check_pressed(vk_escape))
-		{
-			trgMenu = false;
 		}
 	}
 	
@@ -1063,6 +1041,144 @@ if (global.edit)
 			colMenu = false;
 		}
 		
+	}
+	
+	if (conMenu)
+	{
+		draw_set_color($000000);
+		draw_set_alpha(0.4);
+		
+		draw_rectangle(_x, _y, _x2, _y2, false);
+		
+		var conds = mainConds,
+			tcond = [];
+		
+		for (var i = 0; i < array_length(conTar); i ++)
+		{
+			with (conTar[i])
+			{
+				tcond[i] = accConds;
+			}
+		}
+		
+		for (var i = 0; i < array_length(tcond); i ++)
+		{
+			for (var j = 0; j < array_length(tcond[i]); j ++)
+			{
+				if (tcond[i][j] == undefined)
+				{
+					conds[j] = undefined;
+				}
+			}
+		}
+		
+		for (var i = 0; i < array_length(conds); i ++)
+		{
+			if (conds[i] == undefined)
+			{
+				array_delete(conds, i, 1);
+			}
+		}
+		
+		draw_set_color($FFFFFF);
+		draw_set_alpha(1.0);
+		
+		draw_rectangle(_x + 48, global.editY - array_length(conds) * 8, _x2 - 48, global.editY + array_length(conds) * 8, false);
+		
+		draw_set_halign(fa_center);
+		
+		for (var i = 0; i < array_length(conds); i ++)
+		{
+			if (point_in_rectangle(mouse_x, mouse_y,
+				global.editX - 1 - string_width(conds[i]) / 2, global.editY + 4 - array_length(conds) * 8 + i * 16,
+				global.editX + string_width(conds[i]) / 2, global.editY + 12 - array_length(conds) * 8 + i * 16))
+			{
+				draw_set_color($FFDEAA);
+				
+				if (mouse_check_button_pressed(mb_left))
+				{
+					selCon = conds[i];
+					conChg = true;
+					
+					conMenu = false;
+				}
+			}
+			
+			else
+			{
+				draw_set_color($000000);
+			}
+			
+			draw_text(global.editX, global.editY + 9 - array_length(conds) * 8 + i * 16, conds[i]);
+		}
+		
+		draw_set_color($FFFFFF);
+		
+		if (keyboard_check_pressed(vk_escape))
+		{
+			conMenu = false;
+		}
+	}
+	
+	if (trgMenu)
+	{
+		draw_set_color($FFFFFF);
+		draw_set_alpha(1.0);
+		
+		draw_circle(_x2 - 8, _y + 8, 8, false);
+		
+		var hover = false;
+		
+		if (point_in_circle(mouse_x, mouse_y, _x2 - 8, _y + 8, 8))
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				trgMenu = false;
+			}
+			
+			hover = true;
+		}
+		
+		else
+		{
+			if (mouse_check_button_pressed(mb_left))
+			{
+				var _c = ds_list_create();
+				
+				collision_point_list(mouse_x, mouse_y, obj_object_parent, false, true, _c, true);
+				
+				if (ds_list_size(_c) > 0)
+				{
+					for (var i = 0; i < ds_list_size(_c); i ++)
+					{
+						with (_c[| i])
+						{
+							if (accAttr.Main.Condition == "Button Active" && !selected)
+							{
+								for (var j = 0; j < array_length(other.trgTar); j ++)
+								{
+									with (other.trgTar[j])
+									{
+										trigger = [other.id];
+									}
+								}
+								
+								other.trgMenu = false;
+							}
+						}
+					}
+				}
+			}
+			
+			hover = false;
+		}
+		
+		draw_sprite_ext(spr_arrow, hover, _x2 - 8, _y + 8, -1, 1, 0, $FFFFFF, 1);
+		
+		if (keyboard_check_pressed(vk_escape))
+		{
+			trgMenu = false;
+		}
 	}
 	
 	//draw_clear_alpha($FFFFFF, 0);

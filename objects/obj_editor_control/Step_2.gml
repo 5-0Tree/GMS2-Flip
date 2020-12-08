@@ -32,19 +32,24 @@ if (global.edit)
 				//Save as
 				if (keyboard_check(vk_shift))
 				{
-					
+					saveAs = true;
 				}
 				
 				//Save
 				else
 				{
-					save_level(lname);
+					save_level(global.lname);
 				}
 				
 				lchanged = false;
 			}
 			
-			if (keyboard_check_pressed(ord("Z")) && array_length(wpPlace) == 0)
+			if (keyboard_check_pressed(ord("O")))
+			{
+				open = true;
+			}
+			
+			if (keyboard_check_pressed(ord("Z")) && array_length(wpPlace) == 0 && !altMenu && !open)
 			{
 				with (obj_object_parent)
 				{

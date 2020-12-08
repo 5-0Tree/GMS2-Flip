@@ -28,7 +28,7 @@ if (collision_line(x - sw, y, x + sw, y, obj_wall_sp_anti, false, true) == noone
 {
 	with (obj_dynamic_parent)
 	{
-		if (movable)
+		if (movable || object_index == obj_moving_platform_parent)
 		{
 			if (!move && !fall && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0 && global.canRotate)
 			{

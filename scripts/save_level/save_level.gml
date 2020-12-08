@@ -37,34 +37,46 @@ function save_level(level_name)
 	
 	with (obj_object_parent)
 	{
-		data += "{" +
+		data += "{\"Object\" : " +
 				string(object_index) +
-				", " +
+				", \"Angle\" : " +
 				string(image_angle) +
-				", " +
+				", \"X\" : " +
 				string(x) +
-				", " +
+				", \"Y\" : " +
 				string(y) +
-				", " +
+				", \"Color\" : " +
+				string(color) +
+				", \"Alpha\" : " +
+				string(alpha) +
+				", \"Group\" : " +
+				string(group) +
+				", \"Layer\" : " +
 				string(editLayer) +
-				", " +
+				", \"Movable\" : " +
 				string(movable) +
-				", " +
+				", \"AOrigin\" : " +
 				string(a_origin) +
-				", " +
+				", \"XOrigin\" : " +
 				string(x_origin) +
-				", " +
+				", \"YOrigin\" : " +
 				string(y_origin) +
-				", " +
+				", \"WaypointID\" : " +
 				string(wpID) +
-				", " +
+				", \"WaypointNum\" : " +
 				string(wpNum) +
-				", " +
+				", \"WaypointType\" : " +
 				string(wpType) +
-				", " +
+				", \"MoveSpeed\" : " +
 				string(moveSpeed) +
-				", " +
+				", \"PointList\" : " +
 				string(pl) +
+				", \"Locked\" : " +
+				string(locked) +
+				", \"Condition\" : " +
+				string(cond) +
+				", \"Trigger\" : " +
+				string(trigger) +
 				"}; ";
 	}
 	

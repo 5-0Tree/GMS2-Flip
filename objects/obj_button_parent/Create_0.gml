@@ -2,12 +2,20 @@
 
 event_inherited();
 
+depth = 100;
 image_speed = 0;
+
+accConds = [
+	"Player Over",
+	"Active Over",
+	"Enemy Over",
+	undefined
+];
 
 active = false;
 
 locked = false;
-cond = "Player Over";
+cond = accConds[0];
 trigger = [noone];
 
 accAttr = {

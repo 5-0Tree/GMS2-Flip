@@ -47,6 +47,7 @@
     {"id":{"name":"draw_dropdown_menu","path":"scripts/draw_dropdown_menu/draw_dropdown_menu.yy",},"order":3,},
     {"id":{"name":"spr_waypoint","path":"sprites/spr_waypoint/spr_waypoint.yy",},"order":1,},
     {"id":{"name":"alt_edit","path":"scripts/alt_edit/alt_edit.yy",},"order":4,},
+    {"id":{"name":"load_level","path":"scripts/load_level/load_level.yy",},"order":0,},
     {"id":{"name":"spr_enemy_c","path":"sprites/spr_enemy_c/spr_enemy_c.yy",},"order":3,},
     {"id":{"name":"obj_wall_1","path":"objects/obj_wall_1/obj_wall_1.yy",},"order":0,},
     {"id":{"name":"obj_enemy_c","path":"objects/obj_enemy_c/obj_enemy_c.yy",},"order":2,},

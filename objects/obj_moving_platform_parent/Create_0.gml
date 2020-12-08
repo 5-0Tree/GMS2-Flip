@@ -4,7 +4,14 @@ event_inherited();
 
 depth = 10;
 
-startCon = "Player Over";
+accConds = [
+	"Player Over",
+	"Active Over",
+	"Enemy Over",
+	"Button Active"
+];
+
+cond = accConds[0];
 atEnd = false;
 
 wp = noone;
@@ -20,7 +27,7 @@ accAttr = {
 		Group : group,
 		Layer : editLayer,
 		Locked : locked,
-		Condition : startCon,
+		Condition : cond,
 		Speed : undefined,
 		Trigger : undefined
 	}

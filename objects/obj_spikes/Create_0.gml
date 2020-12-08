@@ -2,6 +2,8 @@
 
 event_inherited();
 
+depth = 10;
+
 hazard = true;
 haz_color = 0;
 

@@ -10,9 +10,11 @@ global.maxLayer = 99;
 
 //surfGUI = surface_create(global.WIDTH, global.HEIGHT);
 
+saveAs = false;
+open = false;
+
 angle = 0;
 
-wpN = 0;
 wpID = 0;
 wpNum = 0;
 wpType = 1;
@@ -34,12 +36,24 @@ clickingButton = false;
 
 altMenu = false;
 colMenu = false;
+conMenu = false;
 trgMenu = false;
 
 selCol = $FFFFFF;
 colChg = false;
 
+conTar = [noone];
 trgTar = [noone];
+
+selCon = "";
+conChg = false;
+
+mainConds = [
+	"Player Over",
+	"Active Over",
+	"Enemy Over",
+	"Button Active"
+];
 
 selectX = 0;
 selectY = 0;
@@ -92,7 +106,8 @@ for (var i = 0; i < array_length(objNames) + 1; i ++)
 	scroll[i] = 0;
 }
 
-lname = "New Level";
+global.lname = "New Level";
+
 lchanged = false;
 
 instance_create_layer(0, 0, "Control", obj_camera);

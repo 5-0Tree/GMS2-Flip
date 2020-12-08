@@ -5,6 +5,8 @@ selected = false;
 
 editables = [];
 
+active = false;
+
 hazard = false;
 
 fall = false;

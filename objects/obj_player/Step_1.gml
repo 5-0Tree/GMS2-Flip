@@ -2,6 +2,14 @@
 
 event_inherited();
 
+with (obj_moving_platform_parent)
+{
+	if (move)
+	{
+		other.canMove = false;
+	}
+}
+
 if (fall)
 {
 	image_index = 1;
@@ -12,7 +20,7 @@ else if (canFall)
 	image_index = 0;
 }
 
-if (image_index == 0 && !global.edit && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
+if (image_index == 0 && !global.edit && canMove && ceil(floor(global.screenAngle + 0.5) - 0.5) mod 90 == 0)
 {
 	var dir = keyboard_check(vk_right) - keyboard_check(vk_left),
 		af = global.angleFix,

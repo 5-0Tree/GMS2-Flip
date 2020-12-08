@@ -8,7 +8,7 @@ accAttr = {
 		Group : group,
 		Layer : editLayer,
 		Locked : locked,
-		Condition : startCon,
+		Condition : cond,
 		Speed : undefined,
 		Trigger : undefined
 	}
