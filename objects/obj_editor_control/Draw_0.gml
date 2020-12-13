@@ -22,7 +22,7 @@ if (global.edit)
 	
 	scroll[selCat] = clamp(scroll[selCat], -max(0, ceil(array_length(variable_struct_get(objs, objNames[selCat])) / 2 + 1) * 24 - global.HEIGHT), 0);
 	
-	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, global.editY - 4, _x + 54 * global.expanded + 6, global.editY + 4) && !altMenu)
+	if (point_in_rectangle(mouse_x, mouse_y, _x + 54 * global.expanded, global.editY - 4, _x + 54 * global.expanded + 6, global.editY + 4) && !altMenu && !open && !saveAs)
 	{
 		if (mouse_check_button_pressed(mb_left))
 		{
@@ -76,7 +76,7 @@ if (global.edit)
 				}
 			}
 			
-			if (!altMenu && !keyboard_check(vk_control))
+			if (!keyboard_check(vk_control) && !altMenu && !open && !saveAs)
 			{
 				draw_sprite_ext(object_get_sprite(selObj), 0, grid_x + 8, grid_y + 8, 1, 1, angle, $FFFFFF, 1);
 				
@@ -141,7 +141,7 @@ if (global.edit)
 					
 					ds_list_destroy(_ds);
 					
-					if (can_place)
+					if (can_place && global.go)
 					{
 						with (instance_create_layer(grid_x + 8, grid_y + 8, "Objects", selObj))
 						{
@@ -268,7 +268,7 @@ if (global.edit)
 					}
 				}
 				
-				else if (!keyboard_check(vk_shift) && !altMenu)
+				else if (!keyboard_check(vk_shift) && !altMenu && !open && !saveAs)
 				{
 					with (obj_object_parent)
 					{
@@ -329,7 +329,7 @@ if (global.edit)
 			}
 		}
 		
-		if (mouse_check_button(mb_right) && !altMenu)
+		if (mouse_check_button(mb_right) && !altMenu && !open && !saveAs)
 		{
 			var _ds = ds_list_create(),
 				_b = false,
@@ -447,12 +447,12 @@ if (global.edit)
 			
 			if (o < array_length(variable_struct_get(objs, objNames[selCat])))
 			{
-				if (point_in_rectangle(mouse_x, mouse_y, _x + xx - 8, _y + yy - 8, _x + xx + 8, _y + yy + 8) && !altMenu)
+				if (point_in_rectangle(mouse_x, mouse_y, _x + xx - 8, _y + yy - 8, _x + xx + 8, _y + yy + 8) && !altMenu && !open && !saveAs)
 				{
 					draw_set_color($FFDEAA);
 					draw_set_alpha(0.8);
 					
-					if (mouse_check_button_pressed(mb_left) && !altMenu)
+					if (mouse_check_button_pressed(mb_left) && !altMenu && !open && !saveAs)
 					{
 						if (selObj != variable_struct_get(objs, objNames[selCat])[o])
 						{
@@ -507,7 +507,7 @@ if (global.edit)
 	draw_rectangle(_x + 54 * global.expanded, _y + global.HEIGHT / 2 - 5, _x + 54 * global.expanded + 6, _y + global.HEIGHT / 2 + 4, false);
 	draw_sprite_ext(spr_arrow, expandPressed, _x + global.expanded * 53 + 4, _y + global.HEIGHT / 2, expandDir, 1, 0, $FFFFFF, 1);
 	
-	if (!altMenu)
+	if (!altMenu && !open && !saveAs)
 	{
 		if (keyboard_check_pressed(ord("V")))
 		{
@@ -565,7 +565,7 @@ if (global.edit)
 		{
 			if (point_in_rectangle(mouse_x, mouse_y, _x + 4, _y + 4, _x + 9, _y + 12))
 			{
-				if (!altMenu)
+				if (!altMenu && !open && !saveAs)
 				{
 					if (mouse_check_button_pressed(mb_left))
 					{
@@ -589,9 +589,9 @@ if (global.edit)
 		{
 			if (point_in_rectangle(mouse_x, mouse_y, _x + 47, _y + 4, _x + 52, _y + 12))
 			{
-				if (!altMenu)
+				if (!altMenu && !open && !saveAs)
 				{
-					if (mouse_check_button_pressed(mb_left) && !altMenu)
+					if (mouse_check_button_pressed(mb_left) && !altMenu && !open && !saveAs)
 					{
 						selCat ++;
 					}
@@ -645,7 +645,7 @@ if (global.edit)
 	{
 		if (point_in_rectangle(mouse_x, mouse_y, _x2 - _w - 18, _y2 - 10, _x2 - _w - 13, _y2 - 2))
 		{
-			if (!altMenu)
+			if (!altMenu && !open && !saveAs)
 			{
 				if (mouse_check_button_pressed(mb_left))
 				{
@@ -674,7 +674,7 @@ if (global.edit)
 	{
 		if (point_in_rectangle(mouse_x, mouse_y, _x2 - 9, _y2 - 10, _x2 - 4, _y2 - 2))
 		{
-			if (!altMenu)
+			if (!altMenu && !open && !saveAs)
 			{
 				if (mouse_check_button_pressed(mb_left))
 				{
@@ -899,7 +899,7 @@ if (global.edit)
 							{
 								if (selected)
 								{
-									other.trgTar[iv] = id;
+									other.trgTar[iv] = ID;
 									
 									iv ++;
 								}
@@ -1179,6 +1179,94 @@ if (global.edit)
 		{
 			trgMenu = false;
 		}
+	}
+	
+	if (!altMenu && !saveAs)
+	{
+		if (open)
+		{
+			draw_set_color($000000);
+			draw_set_alpha(0.4);
+			
+			draw_rectangle(_x, _y, _x2, _y2, false);
+			
+			draw_set_color($FFFFFF);
+			draw_set_alpha(1.0);
+			
+			draw_rectangle(_x + 32, _y, _x2 - 32, _y2, false);
+			
+			draw_set_halign(fa_center);
+			
+			draw_set_color($000000);
+			
+			draw_text(global.editX, _y + 8, "Open Level");
+			
+			draw_set_color($FFFFFF);
+			
+			var d = working_directory + "levelData.dat",
+				o = file_text_open_read(d),
+				tempData = [""],
+				nameData = "",
+				_nn = 0;
+			
+			while (!file_text_eof(o))
+			{
+				tempData = file_text_readln(o);
+				
+				if (tempData != "")
+				{
+					var json = json_parse(tempData);
+					
+					nameData[_nn] = json.LevelName;
+					_nn ++;
+				}
+			}
+			
+			file_text_close(o);
+			
+			draw_set_halign(fa_left);
+			
+			levelScroll += (mouse_wheel_up() - mouse_wheel_down()) * 4;
+			levelScroll = clamp(levelScroll, -max(0, ceil(array_length(nameData)) * 16), 0);
+			
+			for (var i = 0; i < array_length(nameData); i ++)
+			{
+				if (point_in_rectangle(mouse_x, mouse_y, _x + 39, _y + 16 + levelScroll + i * 16, _x + 39 + string_width(nameData[i]), _y + 24 + levelScroll + i * 16) && mouse_y > _y + 16)
+				{
+					draw_set_color($FFDEAA);
+					
+					if (mouse_check_button_pressed(mb_left))
+					{
+						global.go = false;
+						
+						load_level(nameData[i]);
+						
+						levelScroll = 0;
+						
+						open = false;
+					}
+				}
+				
+				else
+				{
+					draw_set_color($000000);
+				}
+				
+				draw_text(_x + 40, _y + 22 + levelScroll + i * 16, nameData[i]);
+			}
+			
+			if (keyboard_check_pressed(vk_escape))
+			{
+				levelScroll = 0;
+				
+				open = false;
+			}
+		}
+	}
+	
+	if (mouse_check_button_released(mb_left))
+	{
+		global.go = true;
 	}
 	
 	//draw_clear_alpha($FFFFFF, 0);

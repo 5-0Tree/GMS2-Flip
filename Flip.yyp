@@ -53,7 +53,6 @@
     {"id":{"name":"obj_enemy_c","path":"objects/obj_enemy_c/obj_enemy_c.yy",},"order":2,},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},"order":0,},
     {"id":{"name":"spr_enemy_m","path":"sprites/spr_enemy_m/spr_enemy_m.yy",},"order":2,},
-    {"id":{"name":"rm_test","path":"rooms/rm_test/rm_test.yy",},"order":0,},
   ],
   "Options": [
     {"name":"Linux","path":"options/linux/options_linux.yy",},
@@ -71,7 +70,6 @@
   "RoomOrderNodes": [
     {"roomId":{"name":"rm_init","path":"rooms/rm_init/rm_init.yy",},},
     {"roomId":{"name":"rm_editor","path":"rooms/rm_editor/rm_editor.yy",},},
-    {"roomId":{"name":"rm_test","path":"rooms/rm_test/rm_test.yy",},},
   ],
   "Folders": [
     {"folderPath":"folders/Sprites.yy","order":0,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},

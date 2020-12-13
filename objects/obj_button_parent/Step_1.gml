@@ -2,7 +2,7 @@
 
 var _c = collision_point(x - 16 / 1.5 * dsin(image_angle), y - 16 / 1.5 * dcos(image_angle), obj_dynamic_parent, false, true);
 
-if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_angle) == dcos(global.angleFix)))
+if (!global.edit)
 {
 	if (_c != noone)
 	{

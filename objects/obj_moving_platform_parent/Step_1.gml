@@ -5,9 +5,9 @@ var sw = sprite_width,
 	_c = collision_point(x - sw / 1.5 * dsin(image_angle), y - sh / 1.5 * dcos(image_angle), obj_dynamic_parent, false, true),
 	_o = collision_point(x, y, obj_waypoint, false, true);
 
-if (!init)
+if (_o != noone)
 {
-	if (_o != noone)
+	if (!init)
 	{
 		with (_o)
 		{
@@ -24,6 +24,11 @@ if (!init)
 		
 		init = true;
 	}
+}
+
+else
+{
+	init = false;
 }
 
 if (!global.edit && (dsin(image_angle) == dsin(global.angleFix)) && (dcos(image_angle) == dcos(global.angleFix)))
@@ -75,7 +80,7 @@ if (!global.edit)
 			{
 				if (active)
 				{
-					if (trigger[i] == other.id)
+					if (trigger[i] == other.ID)
 					{
 						other.canMove = true;
 					}

@@ -4,57 +4,54 @@ function load_level(level_name)
 {
 	var d = working_directory + "levelData.dat",
 		o = file_text_open_read(d),
-		data = [],
-		num = 0;
+		data = [];
 	
 	while (!file_text_eof(o))
 	{
 		var o_l = file_text_readln(o);
 		
-		o_l = file_text_readln(o);
-		
-		if (o_l == "[Level Name]: " + level_name)
+		if (o_l != "")
 		{
-			o_l = file_text_readln(o);
+			var json = json_parse(o_l);
 			
-			while (string_count("[Level Name]: ", o_l) == 0)
+			if (json.LevelName == level_name)
 			{
-				data[num] = o_l;
+				instance_destroy(obj_object_parent);
 				
-				o_l = file_text_readln(o);
+				for (var i = 0; i < json.OBJs; i ++)
+				{
+					var s = variable_struct_get(json, "GameObject" + string(i));
+					
+					with (instance_create_layer(s.X, s.Y, "Objects", s.Object))
+					{
+						image_angle = s.Angle;
+						color = s.Color;
+						alpha = s.Alpha;
+						group = s.Group;
+						editLayer = s.Layer;
+						movable = s.Movable;
+						a_origin = s.AOrigin;
+						x_origin = s.XOrigin;
+						y_origin = s.YOrigin;
+						wpID = s.WaypointID;
+						wpNum = s.WaypointNum;
+						wpType = s.WaypointType;
+						moveSpeed = s.MoveSpeed;
+						pl = s.PointList;
+						locked = s.Locked;
+						cond = s.Condition;
+						trigger = s.Trigger;
+						ID = s.ID;
+					}
+				}
 				
-				num ++;
+				global.hist = [];
+				global.hNum = 0;
+				
+				global.lname = level_name;
 			}
-			
-			break;
 		}
 	}
 	
 	file_text_close(o);
-	
-	for (var i = 0; i < array_length(data); i ++)
-	{
-		var json = json_parse(data[i]);
-		
-		with (instance_create_layer(json.X, json.Y, "Objects", json.Object))
-		{
-			image_angle = json.Angle;
-			color = json.Color;
-			alpha = json.Alpha;
-			group = json.Group;
-			editLayer = json.Layer;
-			movable = json.Movable;
-			a_origin = json.AOrigin;
-			x_origin = json.XOrigin;
-			y_origin = json.YOrigin;
-			wpID = json.WaypointID;
-			wpNum = json.WaypointNum;
-			wpType = json.WaypointType;
-			moveSpeed = json.MoveSpeed;
-			pl = json.PointList;
-			locked = json.Locked;
-			cond = json.Condition;
-			trigger = json.Trigger;
-		}
-	}
 }

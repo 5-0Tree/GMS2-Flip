@@ -24,6 +24,7 @@ selObj = -1;
 selCat = 0;
 
 scroll = [];
+levelScroll = 0;
 
 global.go = true;
 

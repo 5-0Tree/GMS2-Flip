@@ -14,30 +14,32 @@ function save_level(level_name)
 	{
 		var o_s = file_text_readln(o);
 		
-		num = real(string_digits(o_s)) + 1;
-		
-		o_s = file_text_readln(o);
-		
-		if (string_count(level_name, o_s) > 0)
+		if (o_s != "")
 		{
-			t_n = level_name + " (" + string(n) + ")";
+			var json = json_parse(o_s);
 			
-			l_n = t_n;
-			n ++;
+			num = json.LevelID + 1;
+			
+			if (json.LevelName == t_n)
+			{
+				t_n = level_name + " (" + string(n) + ")";
+				
+				l_n = t_n;
+				n ++;
+			}
 		}
-		
-		file_text_readln(o);
 	}
 	
 	file_text_close(o);
 	
-	var ap = file_text_open_append(d);
+	var ap = file_text_open_append(d),
+		_n = 0;
 	
-	data = "[Level ID]: " + string(num) + "\n[Level Name]: " + l_n + "\n[Object Data]: ";
+	data = "{\"LevelID\" : " + string(num) + ", \"LevelName\" : " + "\"" + l_n + "\", ";
 	
 	with (obj_object_parent)
 	{
-		data += "{\"Object\" : " +
+		data += "\"GameObject" + string(_n) + "\" : {\"Object\" : " +
 				string(object_index) +
 				", \"Angle\" : " +
 				string(image_angle) +
@@ -73,14 +75,17 @@ function save_level(level_name)
 				string(pl) +
 				", \"Locked\" : " +
 				string(locked) +
-				", \"Condition\" : " +
+				", \"Condition\" : \"" +
 				string(cond) +
-				", \"Trigger\" : " +
+				"\", \"Trigger\" : " +
 				string(trigger) +
-				"}; ";
+				", \"ID\" : " +
+				string(ID) +
+				"}, ";
+		_n ++;
 	}
 	
-	data += "\n";
+	data += "\"OBJs\" : " + string(_n) + "};\n";
 	
 	file_text_write_string(ap, data);
 	

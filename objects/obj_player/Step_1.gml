@@ -4,7 +4,7 @@ event_inherited();
 
 with (obj_moving_platform_parent)
 {
-	if (move)
+	if (cond != "Player Over" && move)
 	{
 		other.canMove = false;
 	}

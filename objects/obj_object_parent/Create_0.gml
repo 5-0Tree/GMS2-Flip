@@ -1,5 +1,7 @@
 /// @description Init
 
+ID = id;
+
 editLayer = 0;
 selected = false;
 
@@ -24,6 +26,12 @@ wpNum = 0;
 wpType = 0;
 
 moveSpeed = 4;
+
+locked = false;
+
+cond = "";
+
+trigger = noone;
 
 group = 0;
 
